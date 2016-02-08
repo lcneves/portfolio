@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simon game</title>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<style>
+@import url('http://fonts.googleapis.com/css?family=Bevan');
+@font-face {
+  font-family: digital-7;
+  src: url("https://cdn.rawgit.com/lcneves/pomodoro-clock/master/digital-7%20(mono%20italic).ttf");
+}
+body {
+  background-color: #fa8;
+}
+body:hover {
+  cursor: default;
+}
+#title {
+  text-align: center;
+  line-height: 1em;
+  font-family: Bevan;
+}
+#console {
+  position: relative;
+  text-align: center;
+  margin: 5em auto;
+  width: 32em;
+  height: 32em;
+  background-color: #080808;
+  border-radius: 50%;
+  line-height: 0;
+  box-shadow: inset 0 0 2em #888;
+}
+#buttons-container {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  width: 88%;
+  height: 88%;
+}
+.button {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  height: 50%;
+  background-color: gray;
+  box-shadow: inset 0 0 0.7em;
+}
+#green {
+  background: #009D03;
+  border-radius: 100% 0 0 0;
+}
+#red {
+  background: #E00D13;
+  border-radius: 0 100% 0 0%;
+}
+#yellow {
+  background: #FDF200;
+  border-radius: 0 0 0 100%;
+}
+#blue {
+  background: #0093F4;
+  border-radius: 0 0 100% 0;
+}
+.line {
+  position: absolute;
+}
+.line, #central-circle {
+  box-shadow: 0 0 0.7em;
+}
+#vertical-line {
+  top: 0;
+  left: 46%;
+  width: 8%;
+  height: 100%;
+  background-color: #080808;
+}
+#horizontal-line {
+  top: 46%;
+  left: 0;
+  width: 100%;
+  height: 8%;
+  background-color: #080808;
+}
+#central-circle {
+  position: absolute;
+  top: 26.5%;
+  left: 26.5%;
+  width: 47%;
+  height: 47%;
+  border-radius: 50%;
+  background-color: #080808;
+}
+#panel {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  width: 84%;
+  height: 84%;
+  border-radius: 50%;
+  background-color: lightgray;
+  box-shadow: inset 0.1em 0.1em 0.4em #080808;
+}
+#simon {
+  font-family: Bevan;
+  position: relative;
+  top: 33%;
+  font-size: 3.2em;
+}
+#functions {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  width: 80%;
+}
+#count-div {
+  position: relative;
+  display: inline-block;
+  width: 3em;
+  height: 2em;
+  background-color: #200;
+  border: 0.3em solid black;
+  border-radius: 0.5em;
+  vertical-align: top;
+  margin: 0 5%;
+}
+#count-text, #count-text-shadow {
+  font-family: digital-7;
+  font-size: 2em;
+  line-height: 1em;
+}
+#count-text {
+  position: relative;
+  bottom: 1em;
+  color: red;
+}
+#count-text-shadow {
+  color: #300;
+}
+.function-container {
+  display: inline-block;
+  position: relative;
+  top: 0.3em;
+}
+.function {
+  display: inline-block;
+  position: relative;
+  width: 1em;
+  height: 1em;
+  background-color: #FDF200;
+  border: 0.3em solid black;
+  border-radius: 50%;
+  box-shadow: 0 0.2em 0.1em;
+}
+.function-text {
+  font-family: sans-serif;
+  font-size: 50%;
+}
+#power-switch-container {
+  position: relative;
+  top: 0.8em;
+  width: 100%;
+}
+#power-switch {
+  display: inline-block;
+  position: relative;
+  top: 0.3em;
+  left: 0.2em;
+  width: 2.5em;
+  height: 1em;
+  border: 0.1em solid #b20000;
+}
+.lower, .upper, .top, #cleft {
+  display: inline-block;
+  height: 100%;
+}
+.lower {
+  width: 25%;
+  background-color: #ff4c4c;
+}
+.upper {
+  width: 12.5%;
+  background-color: #b20000;
+}
+.top {
+  width: 25%;
+  background-color: #ff7f7f;
+}
+#cleft {
+  width: 20%;
+  background-color: #4c0000
+}
+
+@media only screen and (max-device-width: 480px) {
+  body {font-size: 65%;}
+}
+@media only screen and (max-device-height: 480px) {
+  body {font-size: 65%;}
+}
+</style>
+<script>
+$(document).ready(function() {
+  
+  /* I have generated these audio files with Audacity, using the profile "square wave no alias", with the frequencies from the original Simon Game, as stated on http://www.waitingforfriday.com/index.php/Reverse_engineering_an_MB_Electronic_Simon_game */
+  
+  var greenAudio = document.getElementById('green-audio');
+  var redAudio = document.getElementById('red-audio');
+  var yellowAudio = document.getElementById('yellow-audio');
+  var blueAudio = document.getElementById('blue-audio');
+  var loseAudio = document.getElementById('lose-audio');
+  
+  /* Whenever possible, the following timing values were obtained from this source: http://www.waitingforfriday.com/index.php/Reverse_engineering_an_MB_Electronic_Simon_game */
+  
+  var INTERVAL = 50,
+    WAIT = 800,
+    LOSE_DURATION = 1500,
+    LOSE_TIMEOUT = 3000,
+    FIRST_LEVEL = 5,
+    SECOND_LEVEL = 9,
+    THIRD_LEVEL = 13,
+      VICTORY = 20,
+    FIRST_LEVEL_TEMPO = 420,
+    SECOND_LEVEL_TEMPO = 320,
+    THIRD_LEVEL_TEMPO = 270,
+    FOURTH_LEVEL_TEMPO = 220,
+    VOLUME = 0.2,
+    on = true,
+    strict = false,
+    yourTurn = false,
+    yourCount = 0,
+    correct = false,
+    countdown = null,
+    tempo,
+    sequence = [];
+
+  function reset() {
+    yourTurn = false,
+      yourCount = 0,
+      correct = false,
+      sequence = [];
+    $("#count-text").html("--");
+    window.clearTimeout(countdown);
+  }
+
+  $('audio').prop("volume", VOLUME);
+
+  $('#power-switch').click(function() {
+    reset();
+    if (on) {
+      $("#count-text").html('');
+      $(this).css('left', '-0.2em');
+      if (strict) {
+        changeStrict();
+      }
+    } else {
+      $(this).css('left', '0.2em');
+    }
+    on = !on;
+  });
+  $('.function').mousedown(function() {
+    $(this).css('top', '0.1em').css('box-shadow', '0 0.1em 0.1em');
+  });
+  $('#start').mouseup(function() {
+    $(this).css('top', '0').css('box-shadow', '0 0.2em 0.1em');
+    if (on) {
+      start();
+    }
+  });
+  $('#strict').mouseup(function() {
+    $(this).css('top', '0').css('box-shadow', '0 0.2em 0.1em');
+    if (on) {
+      changeStrict();
+    }
+  });
+
+  $('#green').mousedown(function() {
+    $(this).css('top', '0.05em').css('left', '0.05em');
+    press('green');
+  });
+  $('#green').mouseup(function() {
+    $(this).css('top', '0').css('left', '0');
+    stop("green");
+    if (correct) {
+      postPress();
+    }
+  });
+  $('#red').mousedown(function() {
+    $(this).css('top', '0.05em').css('left', '-0.05em');
+    press('red');
+  });
+  $('#red').mouseup(function() {
+    $(this).css('top', '0').css('left', '0');
+    stop("red");
+    if (correct) {
+      postPress();
+    }
+  });
+  $('#yellow').mousedown(function() {
+    $(this).css('top', '-0.05em').css('left', '0.05em');
+    press('yellow');
+  });
+  $('#yellow').mouseup(function() {
+    $(this).css('top', '0').css('left', '0');
+    stop("yellow");
+    if (correct) {
+      postPress();
+    }
+  });
+  $('#blue').mousedown(function() {
+    $(this).css('top', '-0.05em').css('left', '-0.05em');
+    press('blue');
+  });
+  $('#blue').mouseup(function() {
+    $(this).css('top', '0').css('left', '0');
+    stop("blue");
+    if (correct) {
+      postPress();
+    }
+  });
+
+  function press(which) {
+    if (yourTurn && sequence[yourCount] == which) {
+      window.clearTimeout(countdown);
+      light(which);
+      correct = true;
+    } else if (yourTurn) {
+      lose(sequence[yourCount]);
+    }
+  }
+
+  function postPress() {
+    correct = false;
+    yourCount++;
+    if (yourCount == sequence.length) {
+      yourTurn = false;
+      yourCount = 0;
+      window.setTimeout(function() {
+        myTurn();
+      }, WAIT);
+    } else {
+      timerToLose(true);
+    }
+  }
+
+  function light(which) {
+    switch (which) {
+      case "green":
+        if (loseAudio.paused) {
+          greenAudio.play();
+        }
+        $("#green").css("background", "radial-gradient(farthest-corner at 45% 50%, #b2e1b3 20%, #009D03 100%)");
+        break;
+      case "red":
+        if (loseAudio.paused) {
+          redAudio.play();
+        }
+        $("#red").css("background", "radial-gradient(farthest-corner at 55% 50%, #f5b6b8 20%, #E00D13 100%)");
+        break;
+      case "yellow":
+        if (loseAudio.paused) {
+          yellowAudio.play();
+        }
+        $("#yellow").css("background", "radial-gradient(farthest-corner at 45% 50%, #FEFBB2 20%, #FDF200 100%)");
+        break;
+      case "blue":
+        if (loseAudio.paused) {
+          blueAudio.play();
+        }
+        $("#blue").css("background", "radial-gradient(farthest-corner at 55% 50%, #b2defb 20%, #0093F4 100%)");
+        break;
+    }
+  }
+
+  function stop(which) {
+    switch (which) {
+      case "green":
+        greenAudio.pause();
+        greenAudio.currentTime = 0;
+        $("#green").css("background", "#009D03");
+        break;
+      case "red":
+        redAudio.pause();
+        redAudio.currentTime = 0;
+        $("#red").css("background", "#E00D13");
+        break;
+      case "yellow":
+        yellowAudio.pause();
+        yellowAudio.currentTime = 0;
+        $("#yellow").css("background", "#FDF200");
+        break;
+      case "blue":
+        blueAudio.pause();
+        blueAudio.currentTime = 0;
+        $("#blue").css("background", "#0093F4");
+        break;
+      default:
+        stop("green");
+        stop("yellow");
+        stop("red");
+        stop("blue");
+        break;
+    }
+  }
+
+  function changeStrict() {
+    if (strict) {
+      $('#strict').css("background", "#FDF200");
+    } else {
+      $('#strict').css("background", "radial-gradient(red 20%, #FDF200 50%)");
+    }
+    strict = !strict;
+  }
+
+  function myTurn() {
+    window.clearTimeout(countdown);
+    if (sequence.length == VICTORY) {
+      win();
+    } else {
+      var color = Math.ceil(Math.random() * 4);
+      switch (color) {
+        case 1:
+          color = "green";
+          break;
+        case 2:
+          color = "red";
+          break;
+        case 3:
+          color = "yellow";
+          break;
+        case 4:
+          color = "blue";
+          break;
+      }
+      sequence.push(color);
+    //  console.log (sequence); // Enable this to cheat
+      if (sequence.length < FIRST_LEVEL) {
+        tempo = FIRST_LEVEL_TEMPO;
+      } else if (sequence.length < SECOND_LEVEL) {
+        tempo = SECOND_LEVEL_TEMPO;
+      } else if (sequence.length < THIRD_LEVEL) {
+        tempo = THIRD_LEVEL_TEMPO;
+      } else {
+        tempo = FOURTH_LEVEL_TEMPO;
+      }
+      $("#count-text").html(("0" + sequence.length).slice(-2));
+      if (on) {
+        doSequence(0);
+      }
+    }
+  }
+
+  function doSequence(i) {
+    light(sequence[i]);
+    window.setTimeout(function() {
+      stop(sequence[i]);
+      if (on && sequence.length - 1 > i) {
+        window.setTimeout(function() {doSequence(i + 1)}, INTERVAL);
+      } else {
+        yourCount = 0;
+        yourTurn = true;
+        timerToLose();
+      }
+    }, tempo);
+  }
+
+  function start() {
+    reset();
+    $("#count-text").css("opacity", "0");
+    window.setTimeout(function() {
+      $("#count-text").css("opacity", "1");
+    }, WAIT / 3);
+    window.setTimeout(function() {
+      $("#count-text").css("opacity", "0");
+    }, 2 * WAIT / 3);
+    window.setTimeout(function() {
+      $("#count-text").css("opacity", "1");
+      myTurn();
+    }, WAIT);
+  }
+
+  function lose(which) {
+    yourTurn = false;
+    loseAudio.play();
+    if (which) {
+      light(which);
+    }
+    window.setTimeout(function() {
+      loseAudio.pause();
+      loseAudio.currentTime = 0;
+      if (which) {
+        stop(which);
+      }
+      if (strict) {
+        start();
+      } else {
+        window.clearTimeout(countdown);
+        window.setTimeout(function() {
+          doSequence(0);
+        }, WAIT);
+      };
+    }, LOSE_DURATION);
+  }
+
+  function timerToLose() {
+    window.clearTimeout(countdown);
+    if (on) {
+      countdown = window.setTimeout(function() {
+        lose();
+      }, LOSE_TIMEOUT);
+    }
+  }
+
+  function win() {
+    var razzDuration = 100;
+    razz(0);
+
+    function razz(i) {
+      
+      /* Very weird victory celebration routine, but apparently this is exactly what the Simon machines from the late 70s did! */
+      
+      window.setTimeout(function() {
+        if (i == 14) {
+          loseAudio.play();
+          window.setTimeout(function() {
+            loseAudio.pause();
+            loseAudio.currentTime = 0;
+          }, WAIT);
+        }
+        if (i == 0 || i == 4 || i == 8 || i == 12 || i == 16 || i == 20) {
+          stop("green");
+          light("red");
+        }
+        if (i == 1 || i == 5 || i == 9 || i == 13 || i == 17 || i == 21) {
+          stop("red");
+          light("yellow");
+        }
+        if (i == 2 || i == 6 || i == 10 || i == 14 || i == 18) {
+          stop("yellow");
+          light("blue");
+        }
+        if (i == 3 || i == 7 || i == 11 || i == 15 || i == 19) {
+          stop("blue");
+          light("green");
+        }
+        if (i < 21) {
+          i++;
+          razz(i);
+        } else {
+          window.setTimeout(function() {
+            stop("yellow");
+            window.setTimeout(function() {
+              start();
+            }, WAIT);
+          }, razzDuration);
+        }
+      }, razzDuration);
+    }
+  }
+});
+</script>
+</head>
+<body>
+<h1 id="title"><span style="color: #009D03;">Knock-off</span><span  style="color: #E00D13;"> Simon Game</span><br><small><span  style="color: #FDF200;">for free</span><span  style="color: #0093F4;">CodeCamp</span></small></h1>
+<div id="console">
+  <div id="buttons-container">
+  <div id="green" class="button"></div><div id="red" class="button"></div><div id="yellow" class="button"></div><div id="blue" class="button"></div>
+  <div id="vertical-line" class="line"></div>
+  <div id="horizontal-line" class="line"></div>
+  </div>
+  <div id="central-circle">
+    <div id="panel">
+      <span id="simon">simon</span>
+      <div id="functions">
+        <div class="function-container">
+          <div id="start" class="function">
+          </div>
+          <p class="function-text">START</p>
+        </div>
+        <div id="count-div">
+          <span id="count-text-shadow">88</span>
+          <span id="count-text">--</span>
+        </div>
+        <div class="function-container">
+          <div id="strict" class="function">
+          </div>
+          <p class="function-text">STRICT</p>
+        </div>
+        <div id="power-switch-container">
+          <span class="function-text">OFF</span>
+          <div id="power-switch"><div class="lower"></div><div class="upper"></div><div class="top"><div id="cleft"></div></div><div class="upper"></div><div class="lower"></div></div>
+          <span class="function-text">ON</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<audio id="green-audio" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/green.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/green.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/simon/master/green.mp3" type="audio/mp3">
+</audio>
+<audio id="red-audio" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/red.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/red.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/simon/master/red.mp3" type="audio/mp3">
+</audio>
+<audio id="yellow-audio" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/yellow.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/yellow.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/simon/master/yellow.mp3" type="audio/mp3">
+</audio>
+<audio id="blue-audio" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/blue.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/blue.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/simon/master/blue.mp3" type="audio/mp3">
+</audio>
+<audio id="lose-audio" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/lose.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/simon/master/lose.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/simon/master/lose.mp3" type="audio/mp3">
+</audio>
+</body>
+</html>

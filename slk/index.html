@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Diplomatic car sale in Kyiv: Mercedes-Benz SLK 200 AMG Sports</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <style>
+            @font-face {
+                font-family: LiberationSerif;
+                src: url(LiberationSerif-Regular.ttf);
+            }
+            @font-face {
+                font-family: LiberationSans;
+                src: url(LiberationSans-Regular.ttf);
+            }
+            body {
+                font-family: LiberationSerif;
+                background-color: lightgray;
+            }
+            h1, h2 {
+                text-align: center;
+            }
+            h1 {
+                margin: 0.5em auto 0.3em;
+            }
+            h2, h3 {
+                margin: 0.3em auto;
+            }
+            img {
+                cursor: pointer;
+            }
+            .row, .panel {
+                margin-top: 1em;
+            }
+            .panel-heading {
+                background-color: #aaa !important;
+            }
+            .panel-body, tr {
+                background-color: #f8f8f8 !important;
+            }
+            .tab {
+                font-size: 130%;
+            }
+            table {
+                font-family: LiberationSans;
+            }
+            th {
+                width: 8em;
+            }
+            p {
+                font-size: 120%;
+                line-height: 1em;
+            }
+        </style>
+    </head>
+    <body ng-app="SLKModule" ng-controller="SLKController">
+        <h1>Diplomatic car for sale in Kyiv</h1>
+        <h2>Mercedes-Benz SLK200 AMG Sports Roadster – Black</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div id="control-buttons">
+                        <ul class="nav nav-pills nav-justified">
+                            <li role="presentation" ng-class="{photos:'active'}[tab]" ng-click="tab='photos'"><a class="tab" href="#">Photos</a></li>
+                            <li role="presentation" ng-class="{info:'active'}[tab]" ng-click="tab='info'"><a class="tab" href="#">Info & specs</a></li>
+                            <li role="presentation" ng-class="{contact:'active'}[tab]" ng-click="tab='contact'"><a class="tab" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="tab=='photos'">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <img ng-src="{{bigPhoto}}" class="img-responsive img-rounded" ng-click="nextPhoto(bigPhoto)">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-3 col-lg-2" ng-repeat="photo in photos">
+                        <a class="thumbnail" ng-click="selectPhoto(photo)">
+                            <img ng-src="{{photo}}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="tab=='info'">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">The car</h3>
+                    </div>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Year and model:</th>
+                                <td>2013 SLK 200 R172.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Engine:</th>
+                                <td>1.8 L 135 kW (184 PS; 181 hp) I4 turbocharged.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Transmission:</th>
+                                <td>7 speeds AMG Sports 7G-TRONIC-PLUS automatic and tiptronic, with controls behind the steering wheel.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Top speed:</th>
+                                <td>240 km/h (according to Mercedes data; achieved a little more on German autobahns).</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Suspension:</th>
+                                <td>"Dynamic handling" and "AMG Sports" packages : there is a button to switch between "Comfort" and "Sports" modes. In "Sports", the car will be slightly lower, the suspension will be harder and the steering and accelerator responsiveness increases. You can have a very rewarding drive on the road that only a real sportscar can offer, and a comfortable, soft drive in the city.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Safety:</th>
+                                <td>PRE-SAFE System (the car identifies near-crash situations and tightens the seat belts);<br>Pedestrian protection (raises the hood to protect a pedestrian from hitting the windshield);<br>tire pressure loss warning;<br>heated windscreen washing;<br>plus all high-standard Mercedes-Benz safety systems: multiple air-bags, stability controls, etc.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Roof:</th>
+                                <td>Glass hard-top "vario-roof" offers superb acoustic isolation. Opening and closing the roof is very simple: the system is fully automatic, so you just need to push a button and the roof will retract to the trunk. There will still be plenty of room for luggage, even with the roof open!</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Interior design:</th>
+                                <td>AMG Sports package: interior styling in aluminum and black leather with red stitches and seat belts. Interior and ambient lighting packages with feature red light bars. "Mercedes-Benz" aluminum door sill. This car has been ordered directly from the Mercedes factory in Bremen and all design options have been carefully chosen by the owner, so it is unlikely to find a copy in Kyiv.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Body design:</th>
+                                <td>All features of the AMG Sports body styling package: aluminum roll over bars, air inlets, special exhausts, 18" wheels and more. The car looks very unique: it is bold, beautiful and classy.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Comfort options:</th>
+                                <td>Mirror package: automatic dimming of mirrors and folding;<br>AIRGUIDE transparent frame for reducing the wind on the road, with the roof open;<br>AIRSCARF: will blow warm air behind your neck, so that you can open the roof even on cold days;<br>Automatic windscreen wiper with rain sensor;<br>Media center with Bluetooth telephony;<br>THERMOTRONIC automatic air conditioning;<br>Heated seats;<br>plus all amenities you would expect from a Mercedes.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status:</th>
+                                <td>The car is in great condition. Smoking and eating has never been allowed inside. All yearly maintenance has been made at the Mercedes-Benz "Dim Ukraina" dealership. Has travelled 26600 km, mainly on road trips in Europe.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price:</th>
+                                <td>Will sell for US$ 39,900. Customs have not been cleared.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div ng-show="tab=='contact'">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Contact</h3>
+                            </div>
+                            <div class="panel-body">
+                                <h3>Mr. Lucas Neves</h3>
+                                <p>Phone: +380 99 756 98 29</p>
+                                <p>Email: <a href="mailto:lcneves@gmail.com">lcneves@gmail.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- AngularJS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script>
+            (function() {
+                var app = angular.module('SLKModule', []);
+                app.controller('SLKController', ['$scope', function($scope) {
+                    var PHOTO_MAX = 18;
+                    $scope.tab = "photos";
+                    $scope.photos = [];
+                    for (var i = 0; i <= PHOTO_MAX; i++) {
+                        $scope.photos.push('img/' + i + '.jpg');
+                    }
+                    $scope.bigPhoto = $scope.photos[0];
+                    $scope.selectPhoto = function(photo) {
+                        $scope.bigPhoto = photo;
+                    }
+                    $scope.nextPhoto = function(photo) {
+                        var index = $scope.photos.indexOf(photo);
+                        if (index < PHOTO_MAX) {
+                            $scope.bigPhoto = $scope.photos[index + 1];
+                        } else {
+                            $scope.bigPhoto = $scope.photos[0];
+                        }
+                    }
+                }]);
+            })();
+        </script>
+    </body>
+</html>

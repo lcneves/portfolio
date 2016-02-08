@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather</title>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css" />
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<style>
+@keyframes twinkle {
+  0% {
+    opacity: 0.8;
+  }
+  25% {
+    opacity: 0.8;
+  }
+  26% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0.8;
+  }
+}
+body {
+  font-family: sans-serif;
+  background-color: rgb(135, 206, 235);
+  transition: background-color 2s;
+  transition-timing-function: linear;
+  cursor: default;
+}
+p {
+  transition: color 2s;
+}
+#sun-div {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+#sun {
+  z-index: -2;
+  height: 10em;
+  width: 10em;
+  position: relative;
+  left: 0%;
+  top: 150%;
+  vertical-align: bottom;
+  transform: translate(-50%);
+  visibility: hidden;
+  transition: top 0.6s, left 0.6s;
+  transition-timing-function: linear;
+}
+#clouds {
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,0.5) 70%, transparent 100%);  
+  opacity: 0;
+  transition: background-color 2s, opacity 2s;
+}
+#sky {
+  z-index: -2;
+  position: relative;
+  height: 19em;
+}
+#rain {
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.drop, .flake, .thunder {
+  z-index: -1;
+}
+.thunder {
+  transform: translate(-50%);
+}
+.container-fluid {
+  z-index: 2;
+}
+.glass {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.3em;
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+#city-div {
+  display: inline-block;
+  padding: 2em 2em 0.7em;
+}
+
+#city {
+  font-size: 3em;
+  line-height: 1em;
+}
+
+#description {
+  font-size: 1.2em;
+}
+
+.info-title {
+  font-size: 1.2em;
+}
+
+.info-data {
+  font-size: 1.4em;
+  line-height: 0.8em;
+  margin-bottom: 0.2em;
+}
+#temp {
+  display: inline;}
+#temp-change-hidden {
+  visibility: hidden;}
+#demo-div {
+  font-size: 1.5em;
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  margin: 1em;
+  border: 0.2em dotted red;
+  opacity: 0.3;
+  border-radius: 50%;
+  transition: opacity 1s;}
+#demo-div:hover {
+  opacity: 1;}
+#demo {
+  margin: 0.5em 1em;
+  }
+@media only screen and (max-device-width: 480px) {
+  #sky {
+    height: 12em !important;
+  }
+  #sun {
+  height: 7em !important;
+  width: 7em !important;
+  }
+}
+@media only screen and (orientation: landscape) and (max-device-height: 480px) {
+  .container-fluid {
+    position: absolute !important;
+    width: 100% !important;
+    bottom: 0 !important;
+  }
+  .glass {
+    margin-top: 0.2em !important;
+    margin-bottom: 0.2em !important;
+    padding: 0.5em 2em !important;
+  }
+  #city-div {
+    padding: 1em 2em 0.4em !important;
+  }
+  #sun {
+  height: 7em !important;
+  width: 7em !important;
+  }
+}
+</style>
+<script>
+$(document).ready(function() {
+  var
+    rainMaker,
+    snowMaker,
+    thunderMaker,
+    thunderFlash,
+    dropID = 0,
+    flakeID = 0,
+    thunderID = 0,
+    isCelsius = true,
+    temp,
+    autoRefresh,
+    isDemo = false,
+    demoLoop;
+
+  if (navigator.geolocation) {
+    getWeather();
+  }
+
+  function getWeather() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var lat = position.coords.latitude,
+        lon = position.coords.longitude,
+        appId = "337297f2c1415d34d2905a3f8c7f9e7d";
+      $.getJSON("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + appId, function(json) {
+        temp = json.main.temp;
+        var weatherID = json.weather[0].id,
+          weatherDesc = json.weather[0].description,
+          windSpeed = json.wind.speed,
+          sunrise = new Date(json.sys.sunrise * 1000),
+          sunset = new Date(json.sys.sunset * 1000),
+          sunriseMs = json.sys.sunrise * 1000,
+          sunsetMs = json.sys.sunset * 1000,
+          city = json.name;
+        showTemp();
+        $("#city").html(city);
+        $("#description").html(weatherDesc);
+        $("#windSpeed").html(windSpeed + "m/s");
+        $("#sunrise").html(sunrise.getHours() + ":" + ("0" + sunrise.getMinutes()).slice(-2));
+        $("#sunset").html(sunset.getHours() + ":" + ("0" + sunset.getMinutes()).slice(-2));
+        changeBG((new Date()).getTime(), weatherID, sunriseMs, sunsetMs, windSpeed);
+      });
+    });
+    autoRefresh = window.setTimeout(getWeather, 60000);
+  }
+  
+  function showTemp() {
+  if (isCelsius) {
+      $("#temp").html(Math.round(temp - 273.15) + "°C");
+    } else {
+      $("#temp").html(Math.round(temp * 9 / 5 - 459.67) + "°F");
+    }
+  }
+
+  function changeBG(time, weather, sunriseMs, sunsetMs, wind) {
+    
+    /* This function sets the sky color and the weather conditions (rain, snow, thunder, fog, clouds, drizzle, etc) based on the codes received by the API and the local time. */
+    
+    var ratio = 0,
+      color = [0, 0, 0],
+      day = [135, 206, 235],
+      night = [0, 0, 30],
+      rainy = [100, 106, 109],
+      dawnColor = [202, 130, 250],
+      duskColor = [253, 208, 149],
+      duration = 1800000;
+
+    stop();
+
+    /* Refer to http://openweathermap.org/weather-conditions for weather condition codes */
+    
+    if (weather == 800 || weather > 950 && weather < 957) {
+      $("#clouds").css("opacity", "0");
+    } else if (weather > 800 && weather < 804) {
+      $("#clouds").css("opacity", "0.8");
+    } else {
+      $("#clouds").css("opacity", "1");
+      day = rainy;
+    }
+
+    if (weather == 210) {
+      thunder(1);
+    }
+    if (weather >= 200 && weather < 210 || weather == 211 || weather >= 230 && weather < 240 || weather == 960) {
+      thunder(2);
+    }
+    if (weather == 212 || weather == 221 || weather == 901 || weather == 961) {
+      thunder(3);
+    }
+
+    if (weather == 300 || weather == 310 || weather == 230) {
+      rain(1, wind, true);
+    }
+    if (weather == 301 || weather == 311 || weather == 231 || weather == 321) {
+      rain(2, wind, true);
+    }
+    if (weather == 302 || weather == 312 || weather == 232) {
+      rain(3, wind, true);
+    }
+
+    if (weather == 500 || weather == 520 || weather == 200 || weather == 615) {
+      rain(1, wind);
+    }
+    if (weather == 501 || weather == 521 || weather == 201 || weather == 531 || weather == 616) {
+      rain(2, wind);
+    }
+    if (weather == 502 || weather == 522 || weather == 202 || weather == 314) {
+      rain(3, wind);
+    }
+    if (weather == 503 || weather == 960) {
+      rain(4, wind);
+    }
+    if (weather == 504 || weather == 901 || weather == 961) {
+      rain(5, wind);
+    }
+    if (weather == 511 || weather == 611 || weather == 612) {
+      rain(2, wind, false, true);
+    }
+    if (weather == 906) {
+      rain(5, wind, false, true);
+    }
+
+    if (weather == 600 || weather == 620) {
+      snow(1, wind);
+    }
+    if (weather == 601 || weather == 621 || weather == 615 || weather == 616) {
+      snow(2, wind);
+    }
+    if (weather == 602 || weather == 622) {
+      snow(3, wind);
+    }
+
+    if (time <= sunriseMs + duration || time >=  sunsetMs) {
+      if (!$("#stars").html()) {
+        makeStars();
+        $("p").css("color", "#ddd");
+      }
+    } else {
+        $("#stars").html('');
+        $("p").css("color", "black");
+    }
+    if (time < sunriseMs - duration || time > sunsetMs + duration) {
+      color = night;
+      sun(false);
+    } else
+      sun(true, time, sunriseMs, sunsetMs);
+    if (time >= sunriseMs + duration && time < sunsetMs - duration) {
+      color = day;
+    } else if (time < sunriseMs + duration && time >= sunriseMs - duration) {
+      ratio = (sunriseMs + duration - time) / (duration * 2);
+      $(".stars").css("opacity", ratio);
+      for (var i = 0; i < 3; i++) {
+        color[i] = Math.floor(night[i] * ratio + day[i] * (1 - ratio));
+      }
+    } else if (time < sunsetMs && time >= sunsetMs - duration) {
+      ratio = (sunsetMs - time) / duration;
+      for (var i = 0; i < 3; i++) {
+        color[i] = Math.floor(day[i] * ratio + duskColor[i] * (1 - ratio));
+      }
+    } else if (time >= sunsetMs && time <= sunsetMs + duration) {
+      ratio = (time - sunsetMs) / duration;
+      $(".stars").css("opacity", ratio);
+      for (var i = 0; i < 3; i++) {
+        color[i] = Math.floor(night[i] * ratio + duskColor[i] * (1 - ratio));
+      }
+    }
+    document.body.style.backgroundColor = 'rgb(' + color.join(',') + ')';
+  }
+
+  function makeStars() {
+    
+    /* Randomly generates a canopy of twinkling stars. Its density should be constant: there will be more stars on a wider screen. */
+    
+    var size,
+      color,
+      posX,
+      posY,
+      period,
+      quantity = Math.round($("body").width() / 30);
+    for (var i = 0; i < quantity; i++) {
+      size = Math.random() / 4 + 0.2;
+      if (i % 8) {
+        color = "orange";
+      } else if (i % 16) {
+        color = "red";
+      } else {
+        color = "blue";
+      }
+      posX = Math.random() * 90 + 5;
+      posY = Math.random() * 90 + 5;
+      period = Math.random() + 0.3;
+      $("#stars").append('<svg xmlns="http://www.w3.org/2000/svg" class="star" viewBox="0 0 10 10" style="height: ' + size + 'em; width: ' + size + 'em; position: absolute; top: ' + posY + '%; left: ' + posX + '%; animation-name: twinkle; animation-duration: ' + period + 's; animation-iteration-count: infinite;"><polygon points="0,5 5,4 10,5 5,6" style="fill:white;stroke:' + color + ';stroke-width:0.1" /><polygon points="5,0 4,5 5,10 6,5" style="fill:white;stroke:' + color + ';stroke-width:0.1" /></svg>');
+    }
+  }
+
+  function sun(isThere, time, sunrise, sunset) {
+    
+    /* This function will move the sun around the sky according to the current time and the sunrise and sunset times  reported by the API */
+    
+    if (!isThere) {
+      $("#sun").css("visibility", "hidden");
+    } else {
+      time -= sunrise;
+      sunset -= sunrise;
+      sunrise = 0;
+      var posX = (time / sunset) * 80 + 10;
+      if (time / sunset > 0 && time / sunset < 1) {
+        var posY = (1 - (Math.sqrt(Math.abs(Math.abs(2 * time / sunset - 1) - 1)))) * 100;
+      }
+      $("#sun").css("top", posY + "%");
+      $("#sun").css("left", posX + "%");
+      $("#sun").css("visibility", "visible");
+    }
+  }
+
+  function rain(intensity, wind, drizzle, freezing) {
+    
+    /* This function creates rain drops made of inline SVG. Their quantity and size varies with the intensity reported by the API. The drops are skewed with the wind. It seems that average rain falls at about 10 m/s, so I make it skew proportionally to the wind, so that a 10 m/s wind will skew the rain at 45 degrees. */
+    
+    var windFactor = 10,
+      width = $("body").width(),
+      skew = $("body").height() * wind / windFactor,
+      fill;
+    if (freezing) {
+      fill = "#fff";
+    } else {
+      fill = "#bbf";
+    }
+    rainMaker = window.setInterval(function() {
+      var posX = Math.random();
+      var posZ = (1 + intensity / 3) * Math.pow(Math.random(), 2) + 1;
+      if (drizzle) {
+        posZ = Math.sqrt(posZ);
+      }
+      $("#rain").append('<svg xmlns="http://www.w3.org/2000/svg" id="drop' + dropID + '" class="drop" viewBox="0 0 10 50" preserveAspectRatio="xMidYMid" style="position: absolute; top: 0; left: ' + (posX * (width + skew) - skew) + 'px; height: ' + (posZ / 2) + 'em; opacity: ' + (posZ / 9) + '; transform: skewX(' + (Math.atan(wind / windFactor)) + 'rad);"> <g style="fill:' + fill + '; "> <polygon points="5,2 9,45 1,45"  /> <circle cx="5" cy="45" r="4" /> </g></svg>');
+      $("#drop" + dropID).animate({
+        top: "100%",
+        left: "+=" + skew
+      }, Math.round(2000 / posZ), "linear", function() {
+        $(this).remove();
+      });
+      dropID++;
+    }, Math.floor(200000 / (Math.pow(intensity, 2) * width)));
+  }
+
+  function snow(intensity, wind) {
+    
+    /* This function creates snow balls made of inline SVG. Their quantity and size varies with the intensity reported by the API. I've read on some paper that the average snow falls at a fifth of the speed of the average rain, so that's how I've adjusted this function for falling speed and wind, compared to the rain function above. */
+    
+    var windFactor = 2,
+      width = $("body").width(),
+      skew = $("body").height() * wind / windFactor;
+    snowMaker = window.setInterval(function() {
+      var posX = Math.random();
+      var posZ = (1 + intensity / 2) * Math.pow(Math.random(), 2) + 1;
+      $("#rain").append('<svg xmlns="http://www.w3.org/2000/svg" id="flake' + flakeID + '" class="flake" viewBox="0 0 2 2" preserveAspectRatio="xMidYMid" style="position: absolute; top: 0; left: ' + (posX * (width + skew) - skew) + 'px; height: ' + (posZ / 6) + 'em; opacity: ' + (posZ / 3) + ';"> <circle cx="1" cy="1" r="1" style="fill: white;" /> </svg>');
+      $("#flake" + flakeID).animate({
+        top: "100%",
+        left: "+=" + skew
+      }, {
+        duration: Math.round(10000 / posZ),
+        easing: "linear",
+        queue: false,
+        complete: function() {
+          $(this).remove();
+        }
+      });
+      flakeID++;
+    }, Math.floor(200000 / (Math.pow(intensity, 2) * width)));
+  }
+
+  function thunder(intensity) {
+    
+    /* Randomly generates an inline-SVG thunder bolt that may flicker randomly. The frequency will depend on the severity of the thunder storm reported by the API. */
+    
+    var durationMin = 100,
+      durationRandom = 500;
+    thunderFlash = window.setInterval(function() {
+      if (Math.floor(3 * Math.random())) {
+        $(".thunder").css("opacity", "1");
+      } else {
+        $(".thunder").css("opacity", "0");
+      }
+    }, 50);
+    thunderMaker = window.setInterval(function() {
+      if (Math.pow(intensity, 2) > Math.random() * 15) {
+        var posX = Math.random() * 80 + 10,
+          posZ = (3 * Math.pow(Math.random(), 2) + 1) / 4,
+          duration = Math.random() * durationRandom + durationMin,
+          edges = [
+            [100, 20 - (posZ * 20)]
+          ],
+          i = 0,
+          edgesString = 'M' + edges[0][0] + ' ' + edges[0][1];
+        while (edges[i][1] < 400) {
+          i++;
+          edges.push([edges[i - 1][0] + Math.random() * 20 - 10, edges[i - 1][1] + Math.random() * 20]);
+        }
+        for (var j = 1; j <= i; j++) {
+          edgesString += ' L' + edges[j][0] + ' ' + edges[j][1];
+          j++;
+        }
+        $("#rain").append('<svg xmlns="http://www.w3.org/2000/svg" id="thunder' + thunderID + '" class="thunder" viewBox="0 0 200 400" preserveAspectRatio="xMidYMid" style="position: absolute; top: 0; left: ' + (posX) + '%; height: ' + (posZ * 400) + '%; opacity: ' + (posZ) + ';"> <defs> <radialGradient id="thunder-grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%"> <stop offset="0%" style="stop-color:white; stop-opacity:0.3" /> <stop offset="100%" style="stop-color:white;stop-opacity:0" /> </radialGradient>  </defs> <ellipse cx="' + edges[0][0] + '" cy="' + edges[0][1] + '" rx="70" ry="8" fill="url(#thunder-grad)"/> <path d="' + edgesString + '" stroke="white" stroke-width="0.3" fill="none" /></svg>');
+        window.setTimeout(function() {
+          $(".thunder").remove();
+        }, duration);
+        thunderID++;
+      }
+    }, durationRandom + durationMin);
+  }
+
+  function stop() {
+    window.clearInterval(rainMaker);
+    window.clearInterval(snowMaker);
+    window.clearInterval(thunderMaker);
+    window.clearInterval(thunderFlash);
+  }
+
+  $("#temp-div").click(function() {
+    isCelsius = !isCelsius;
+    showTemp();
+  });
+  
+  $("#demo-div").click(function() {
+    
+    /* A brief demonstration of all the capabilities of this app. Sit back and enjoy! */
+    
+    if (isDemo) {
+      window.clearTimeout(demoLoop);
+      getWeather();
+    } else {
+      window.clearTimeout(autoRefresh);
+      var time = 86400000,
+        sunriseMs = 36000000,
+        sunsetMs = 79200000,
+        pace = 288000,
+        frequency = 600,
+        wind = 5,
+        condition = 0,
+        conditionArray = [{
+          id: 600,
+          name: "light snow",
+          wind: 0.7,
+          temperature: 270
+        }, {
+          id: 601,
+          name: "snow",
+          wind: 2.1,
+          temperature: 269
+        }, {
+          id: 601,
+          name: "snow",
+          wind: 3.0,
+          temperature: 268
+        }, {
+          id: 602,
+          name: "heavy snow",
+          wind: 5,
+          temperature: 269
+        }, {
+          id: 616,
+          name: "rain and snow",
+          wind: 3.5,
+          temperature: 274
+        }, {
+          id: 616,
+          name: "rain and snow",
+          wind: 3.5,
+          temperature: 274
+        }, {
+          id: 511,
+          name: "freezing rain",
+          wind: 3.5,
+          temperature: 273
+        }, {
+          id: 302,
+          name: "heavy intensity drizzle",
+          wind: 3.5,
+          temperature: 276
+        }, {
+          id: 301,
+          name: "drizzle",
+          wind: 2.7,
+          temperature: 280
+        }, {
+          id: 800,
+          name: "clear sky",
+          wind: 1.3,
+          temperature: 283
+        }, {
+          id: 800,
+          name: "clear sky",
+          wind: 1.3,
+          temperature: 287
+        }, {
+          id: 800,
+          name: "clear sky",
+          wind: 1.3,
+          temperature: 287
+        }, {
+          id: 802,
+          name: "scattered clouds",
+          wind: 1.5,
+          temperature: 288
+        }, {
+          id: 804,
+          name: "overcast clouds",
+          wind: 1.6,
+          temperature: 289
+        }, {
+          id: 501,
+          name: "moderate rain",
+          wind: 2.3,
+          temperature: 291
+        }, {
+          id: 202,
+          name: "thunderstorm with heavy rain",
+          wind: 4.5,
+          temperature: 292
+        }, {
+          id: 202,
+          name: "thunderstorm with heavy rain",
+          wind: 4.5,
+          temperature: 294
+        }, {
+          id: 961,
+          name: "violent storm",
+          wind: 12,
+          temperature: 297
+        }, {
+          id: 201,
+          name: "thunderstorm with rain",
+          wind: 6.1,
+          temperature: 295
+        }, {
+          id: 210,
+          name: "light thunderstorm",
+          wind: 3,
+          temperature: 294
+        }, {
+          id: 210,
+          name: "light thunderstorm",
+          wind: 3,
+          temperature: 292
+        }, {
+          id: 951,
+          name: "calm",
+          wind: 0.1,
+          temperature: 290
+        }];
+      $("#city").html("Demonstration");
+        $("#sunrise").html("6:00");
+        $("#sunset").html("18:00");
+      (function loop(i, condition) {
+        demoLoop = window.setTimeout(function() {
+          var date = new Date(time - i);
+          $("#description").html(conditionArray[condition].name);
+          $("#windSpeed").html(conditionArray[condition].wind+"m/s");
+          temp = conditionArray[condition].temperature;
+          showTemp();
+          changeBG(time - i,conditionArray[condition].id,
+            sunriseMs, sunsetMs,
+            conditionArray[condition].wind);
+          if (i -= pace) {
+            if (condition < conditionArray.length - 1 && i % (pace*12) == 0) {
+              condition++;
+            }
+            loop(i, condition);
+          } else {
+            isDemo = false;
+            getWeather();
+          }
+        }, frequency);
+      })(time, condition);
+    }
+    isDemo = !isDemo;
+  });
+});
+</script>
+</head>
+<body>
+<div id="rain"></div>
+<div id="sky">
+  <div id="stars"></div>
+  <div id="sun-div">
+    <svg xmlns="http://www.w3.org/2000/svg" id="sun" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+      <defs>
+        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+          <stop offset="0%" style="stop-color:rgb(255,255,65);
+      stop-opacity:1" />
+          <stop offset="50%" style="stop-color:rgb(255,255,65);
+      stop-opacity:0.7" />
+          <stop offset="100%" style="stop-color:rgb(255,255,65);stop-opacity:0" />
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="50" fill="url(#grad1)" />
+      <circle cx="50" cy="50" r="25" fill="rgb(255,255,65)" />
+    </svg>
+  </div>
+  <div id="clouds"></div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3 text-center">
+      <div id="city-div" class="glass text-center">
+        <p id="city">Getting location…</p>
+        <p id="description"></p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-sm-3 col-xs-6 col-md-offset-2 text-center">
+      <div id="wind-div" class="glass text-center">
+        <p class="info-title">Wind:</p>
+        <p id="windSpeed" class="info-data">–––</p>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+      <div id="temp-div" class="glass text-center">
+        <p class="info-title">Temperature:</p>
+        <i id="temp-change-hidden" class="fa fa-refresh info-data"></i>
+        <p id="temp" class="info-data">–––</p> <i class="fa fa-refresh info-data"></i>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+      <div id="sunrise-div" class="glass text-center">
+        <p class="info-title">Sunrise:</p>
+        <p id="sunrise" class="info-data">–––</p>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+      <div id="sunset-div" class="glass text-center">
+        <p class="info-title">Sunset:</p>
+        <p id="sunset" class="info-data">–––</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="demo-div" class="text-center">
+  <p id="demo"><strong>Demo</strong></p>
+</div>
+</body>
+</html>

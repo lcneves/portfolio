@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chocolate Calc</title>
+<style>
+/*
+This design relies on "ridge" and "outset" borders. Unfortunately, the W3C specifications leaves it up to each browser to implement the colors of 3D borders. This calc looks best on Chrome; looks OK on Safari; and looks awful on Firefox. I haven't tested it on IE.
+*/
+
+@import url('http://fonts.googleapis.com/css?family=Chewy');
+@font-face {
+  font-family: digital-7;
+  src: url("https://cdn.rawgit.com/lcneves/pomodoro-clock/master/digital-7%20(mono%20italic).ttf");
+}
+
+body {
+  text-align: center;
+  background-color: #d2c2b7;
+}
+
+div {
+  display: inline-block;
+}
+
+h1 {
+  font-family: Chewy;
+  color: #49240a;
+}
+
+#frame {
+  color: #2a1406;
+  text-align: center;
+  background-color: #69340f;
+  margin: 2em auto;
+  border: 0.3em ridge #69340f;
+  outline: 0.2em outset #784826;
+  box-shadow: 0.2em 0.2em 0.4em 0.4em;
+}
+
+.button {
+  color: #2a1406;
+  width: 4em;
+  height: 2.5em;
+  margin: 0.3em;
+  border: 0.25em ridge #69340f;
+  outline: 0.25em outset #784826;
+  background-color: #69340f;
+  cursor: default;
+}
+
+.bottom-rows {}
+
+#add-div {
+  vertical-align: top;
+}
+
+#add {
+  height: 5.55em;
+}
+
+#display {
+  position: relative;
+  margin: 0.5em auto;
+  background-color: #C7C7B0;
+  border: 0.3em inset #784826;
+}
+
+.lcd {
+  font-size: 2.5em;
+  font-family: digital-7;
+  line-height: 1em;
+  margin: 0 0.3em;
+}
+
+#lcd-shadow {
+  color: rgba(0, 0, 0, 0.07)
+}
+
+#numbers {
+  position: absolute;
+  right: 0;
+}
+
+/* Try to make it look better on Firefox:
+@-moz-document url-prefix() {
+  .button, #frame {
+    border-color: #341a07 !important;
+    outline-color: #341a07 !important;
+  }
+}
+*/
+</style>
+</head>
+<body>
+<h1>Chocolate Calc</h1>
+<div id="frame">
+  <div id="display">
+    <span id=numbers class="lcd">0</span>
+    <span id="lcd-shadow" class="lcd">8888888888</span>
+  </div>
+  <br />
+  <button id="ac" class="button" onclick='press("ac")'><strong>AC</strong></button><button id="CE" class="button" onclick='press("ce")'><strong>CE</strong></button><button id="percent" class="button" onclick='press("percent")'><strong>%</strong></button><button id="divide" class="button" onclick='press("divide")'><strong>÷</strong></button><br /><button id="1" class="button" onclick="press(1)"><strong>1</strong></button><button id="2" class="button" onclick="press(2)"><strong>2</strong></button><button id="3" class="button" onclick="press(3)"><strong>3</strong></button><button id="multiply" class="button" onclick='press("multiply")'><strong>×</strong></button></br/><button id="4" class="button" onclick="press(4)"><strong>4</strong></button><button id="5" class="button" onclick="press(5)"><strong>5</strong></button><button id="6" class="button" onclick="press(6)"><strong>6</strong></button><button id="subtract" class="button" onclick='press("subtract")'><strong>–</strong></button><br /><div class="bottom-rows"><button id="7" class="button" onclick="press(7)"><strong>7</strong></button><button id="8" class="button" onclick="press(8)"><strong>8</strong></button><button id="9" class="button" onclick="press(9)"><strong>9</strong></button><br><button id="0" class="button" onclick="press(0)"><strong>0</strong></button><button id="point" class="button" onclick='press("point")'><strong>.</strong></button><button id="equal" class="button" onclick='press("equal")'><strong>=</strong></button></div><div id=add-div><button id="add" class="button" onclick='press("add")'><strong></strong>+</button></div>
+</div>
+<script>
+var lcd = document.getElementById('numbers'),
+  x = 0,
+  y,
+  oper = false,
+  input = false,
+  DISPLAY_SIZE = 10,
+  BLINK_DELAY = 100;
+
+function blink(arg) {
+  input = false;
+  lcd.style.visibility = "hidden";
+  if (arg === 0) {
+    lcd.innerHTML = "0";
+  }
+  if (arg) {
+    if (arg.toString().length > DISPLAY_SIZE) {
+      lcd.innerHTML = arg.toExponential(3).toString().substring(0, DISPLAY_SIZE);
+    } else {
+      lcd.innerHTML = arg.toString().substring(0, DISPLAY_SIZE);
+    }
+  }
+  setTimeout(function() {
+    lcd.style.visibility = "visible";
+  }, BLINK_DELAY)
+};
+
+function doMath(arg) {
+  switch (arg) {
+    case "divide":
+      blink(x = y / x);
+      break;
+    case "multiply":
+      blink(x = y * x);
+      break;
+    case "subtract":
+      blink(x = y - x);
+      break;
+    case "add":
+      blink(x = y + x);
+      break;
+  }
+  oper = false;
+  input = false;
+};
+
+function doPercent(arg) {
+  switch (arg) {
+    case "divide":
+      blink(x = y / (x / 100));
+      break;
+    case "multiply":
+      blink(x = y * (x / 100));
+      break;
+    case "subtract":
+      blink(x = y * (100 - x) / 100);
+      break;
+    case "add":
+      blink(x = y * (100 + x) / 100);
+      break;
+  }
+  oper = false;
+  input = false;
+};
+
+function press(button) {
+  switch (button) {
+    case "ac":
+      x = y = 0;
+      oper = false;
+      blink("0");
+      break;
+    case "ce":
+      blink("0");
+      break;
+    case "point":
+      if (input) {
+        if (lcd.innerHTML.length < DISPLAY_SIZE) {
+          lcd.innerHTML += ".";
+        }
+      } else {
+        blink("0.");
+        input = true;
+      }
+      break;
+    case "equal":
+      if (oper) {
+        y = x;
+        x = parseFloat(lcd.innerHTML);
+        doMath(oper);
+      } else blink();
+      break;
+    case "percent":
+      if (oper) {
+        y = x;
+        x = parseFloat(lcd.innerHTML);
+        doPercent(oper);
+      } else blink();
+      break;
+    case 0:
+      if (input) {
+        if (lcd.innerHTML.length < DISPLAY_SIZE) {
+          lcd.innerHTML += "0";
+        }
+      } else {
+        blink("0");
+      }
+      break;
+    default:
+      if (button > 0) {
+        if (!input) {
+          lcd.innerHTML = button.toString();
+          input = true;
+        } else if (lcd.innerHTML.length < DISPLAY_SIZE) lcd.innerHTML += button.toString();
+      } else {
+        y = x;
+        x = parseFloat(lcd.innerHTML);
+        if (oper) doMath(oper);
+        else blink();
+        oper = button;
+      }
+  }
+};
+</script>
+</body>
+</html>

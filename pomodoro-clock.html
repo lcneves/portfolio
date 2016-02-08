@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pomodoro Clock</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text-css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" media="screen" />
+
+<style>
+@font-face {
+    font-family: digital-7;
+    src: url("https://cdn.rawgit.com/lcneves/pomodoro-clock/master/digital-7%20(mono%20italic).ttf");
+}
+body {
+  background-color: #FFBF57;
+}
+div {
+  text-align: center;
+}
+
+strong, span {
+  font-family: sans-serif;
+}
+#title {
+  font-family: digital-7;
+  font-size: 3em;
+  font-weight: normal;
+  text-align: center;
+  color: #c00;
+}
+#tomato {
+  width: 25em;
+  height: 25em;
+  margin: 2em auto;
+  border-radius: 50%;
+  background-color: #FF2700;
+  box-shadow: inset 0 0 1em;
+}
+
+#display {
+  display: inline-block;
+  width: 72%;
+  height: 40%;
+  margin: auto 0;
+  border-radius: 5%;
+  border: 0.2em solid green;
+  background-color: lightgreen;
+}
+
+.center {
+  display: inline-block;
+  width: 10%;
+}
+
+#top-bar, #bottom-bar {
+  height: 30%;
+}
+
+#top-bar {
+  position: relative;
+  top: 2.3em;
+}
+
+#clock {
+  display: inline-block;
+  margin: auto;
+  position: relative;
+}
+
+.lcd {
+  font-family: digital-7;
+  font-size: 7em;
+  text-align: center;
+  display: inline;
+}
+
+.m {
+  position: relative;
+  left: 0.15em;
+}
+
+.s {
+  position: relative;
+  right: 0.15em;
+}
+
+.clock-shadow {
+}
+
+.shadow {
+  position: absolute;
+  color: rgba(0,0,0,0.07);
+}
+
+.sides {
+  display: inline-block;
+  width: 40%;
+}
+
+.right {
+  text-align: left;
+}
+
+.left {
+  text-align: right;
+}
+
+#center-left, #center-right {
+  position: relative;
+  top: 1em;
+  margin: auto 0;
+}
+
+#center-left {
+  left: 0.2em;
+}
+
+#center-right {
+  right: 0.2em;
+}
+
+#play-div {
+  display: inline-block;
+  margin: 1.3em 0.2em auto auto;
+}
+
+#play-button {
+  width: 6em;
+  height: 3em;
+  border-radius: 30% 10% 10% 100%;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+.button-text {
+  display: inline-block;
+  position: relative;
+}
+
+#play-button-text {
+  left: 0.4em;
+  bottom: 0.1em;
+}
+
+#reset-div {
+  display: inline-block;
+  margin: 1.3em auto auto 0.2em ;
+}
+
+#reset-button {
+  width: 6em;
+  height: 3em;
+  border-radius: 10% 30% 100% 10%;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#reset-button-text {
+  right: 0.3em;
+  bottom: 0.1em;
+}
+
+#work-set-div {
+  display: inline-block;
+  margin: auto 0.2em 1.3em auto;
+}
+
+#work-minus-button {
+  width: 4em;
+  height: 2.5em;
+  border-radius: 100% 10% 10% 30%;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#work-minus-button-text {
+  display: inline-block;
+  position: relative;
+  bottom: 0.1em;
+  left: 0.3em;
+}
+
+#work-plus-button {
+  width: 2em;
+  height: 2.5em;
+  border-radius: 10% 10% 10% 10%;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#work-plus-button-text {
+  display: inline-block;
+  position: relative;
+}
+
+#break-set-div {
+  display: inline-block;
+  margin: auto auto 1.3em 0.2em;
+}
+
+#break-minus-button {
+  width: 2em;
+  height: 2.5em;
+  border-radius: 10% 0 0 10%;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#break-minus-button-text {
+  bottom: 0.1em;  
+}
+
+#break-plus-button {
+  width: 4em;
+  height: 2.5em;
+  border-radius: 0 100% 30% 0;
+  background-color: lightgray;
+  box-shadow: 0.1em 0.1em 0.2em;
+}
+
+#break-plus-button-text {
+  right: 0.35em;  
+}
+
+.volume-div {
+  display: inline-block;
+  text-align: center;
+}
+
+.volume-bar {
+  display: inline-block;
+  height: 5em;
+}
+
+#work-div, #break-div {
+  display: inline-block;
+  width: 45%;
+  position: relative;
+  top: 0.6em;
+  text-align: center;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+#work, #break {
+  visibility: hidden;
+}
+</style>
+
+<script>
+var sec = 0;
+var timerOn;
+var pauseOn;
+var setTimer;
+var setBlink;
+var last = -1;
+var isBreak = false;
+var workMin = 25;
+var breakMin = 5;
+var isPause = false;
+var cursorBlink = true;
+var pauseBlink = true;
+
+function play() {
+  clearInterval(pauseOn);
+  clearInterval(setBlink);
+  document.getElementById("lcdm").style.visibility = "visible";
+  document.getElementById("lcds").style.visibility = "visible";
+  if (isPause == false) {
+    isPause = true;
+    if (isBreak == false) {
+      if (last == -1) {
+        document.getElementById('ratchet').play();
+        document.getElementById('play-button').disabled = true;
+        document.getElementById('reset-button').disabled = true;
+        document.getElementById('work-minus-button').disabled = true;
+        document.getElementById('work-plus-button').disabled = true;
+        document.getElementById('break-minus-button').disabled = true;
+        document.getElementById('break-plus-button').disabled = true;
+        setTimeout(function() {
+          document.getElementById('play-button').disabled = false;
+          document.getElementById('reset-button').disabled = false;
+          startTimer(workMin);
+        }, 1000);
+      } else {
+        startTimer(last);
+      };
+    } else {
+      startTimer(last);
+    };
+  } else {
+    clearInterval(timerOn);
+    last = sec / 60;
+    isPause = false;
+    pauseOn = setInterval(function() {
+      if (pauseBlink = !pauseBlink) {
+        if (isBreak) {
+          document.getElementById("break").style.visibility = "hidden";
+        } else {
+          document.getElementById("work").style.visibility = "hidden";
+        }
+      } else {
+        if (isBreak) {
+          document.getElementById("break").style.visibility = "visible";
+        } else {
+          document.getElementById("work").style.visibility = "visible";
+        }
+      }
+    }, 500);
+  };
+};
+
+function startTimer(min) {
+  sec = min * 60;
+  timerOn = setInterval(runTimer, 500);
+};
+
+function runTimer() {
+  if (cursorBlink = !cursorBlink) {
+    document.getElementById("lcdd").style.visibility = "hidden";
+  } else {
+    document.getElementById("lcdd").style.visibility = "visible";
+    if (isBreak == false) {
+      document.getElementById('work').style.visibility = "visible";
+      document.getElementById('break').style.visibility = "hidden";
+      if (sec % 2 == 0) {
+        document.getElementById('tick').play();
+      } else {
+        document.getElementById('tack').play();
+      };
+      sec--;
+      document.getElementById('lcdm').innerHTML = ("0" + (Math.floor(sec / 60))).slice(-2);
+      document.getElementById('lcds').innerHTML = ("0" + (sec % 60)).slice(-2);
+      if (sec == 0) {
+        document.getElementById('ding').play();
+        sec = breakMin * 60;
+        isBreak = true;
+      }
+    };
+    if (isBreak == true) {
+      document.getElementById('work').style.visibility = "hidden";
+      document.getElementById('break').style.visibility = "visible";
+      document.getElementById('lcdm').innerHTML = ("0" + (Math.floor(sec / 60))).slice(-2);
+      document.getElementById('lcds').innerHTML = ("0" + (sec % 60)).slice(-2);
+      if (sec == 0) {
+        document.getElementById('ding').play();
+        reset();
+      } else sec--;
+    };
+  }
+};
+
+function reset() {
+  clearInterval(pauseOn);
+  clearInterval(timerOn);
+  clearInterval(setBlink);
+  cursorBlink = true;
+  document.getElementById("lcdm").style.visibility = "visible";
+  document.getElementById("lcds").style.visibility = "visible";
+  document.getElementById("lcdd").style.visibility = "visible";
+  document.getElementById('work').style.visibility = "hidden";
+  document.getElementById('break').style.visibility = "hidden";
+  last = -1;
+  isBreak = false;
+  isPause = false;
+  document.getElementById('lcdm').innerHTML = ("0" + workMin).slice(-2);
+  document.getElementById('lcds').innerHTML = "00";
+  document.getElementById('work-minus-button').disabled = false;
+  document.getElementById('work-plus-button').disabled = false;
+  document.getElementById('break-minus-button').disabled = false;
+  document.getElementById('break-plus-button').disabled = false;
+}
+
+function showVal(val) {
+  document.getElementById('timer').innerHTML = val + ":00";
+};
+
+function showBreak(val) {
+  document.getElementById('break').innerHTML = val + ":00";
+};
+
+function changeVolume(val) {
+  document.getElementById('tick').volume = (val / 100);
+  document.getElementById('tack').volume = (val / 100);
+  document.getElementById('ratchet').volume = (val / 100);
+};
+
+function set(button) {
+  setTimer = 10;
+  clearInterval(setBlink);
+  switch (button) {
+    case 0:
+      if (workMin != 1) workMin--;
+      break;
+    case 1:
+      if (workMin != 99) workMin++;
+      break;
+    case 2:
+      if (breakMin != 0) breakMin--;
+      break;
+    case 3:
+      if (breakMin != 99) breakMin++;
+      break;
+  }
+  document.getElementById("lcdm").style.visibility = "visible";
+  document.getElementById("lcds").style.visibility = "visible";
+  if (button < 2) {
+    document.getElementById('lcdm').innerHTML = ("0" + workMin).slice(-2);
+    document.getElementById('work').style.visibility = "visible";
+    document.getElementById('break').style.visibility = "hidden";
+  } else {
+    document.getElementById('lcdm').innerHTML = ("0" + breakMin).slice(-2);
+    document.getElementById('work').style.visibility = "hidden";
+    document.getElementById('break').style.visibility = "visible";
+  };
+  setBlink = setInterval(function() {
+    runSet(button);
+  }, 500);
+};
+
+function runSet(button) {
+  if (setTimer == 0) {
+    document.getElementById("lcdm").style.visibility = "visible";
+    document.getElementById("lcds").style.visibility = "visible";
+    clearInterval(setBlink);
+    reset();
+  } else {
+    if (setTimer % 2 == 0) {
+      document.getElementById("lcdm").style.visibility = "visible";
+      document.getElementById("lcds").style.visibility = "visible";
+      if (button < 2) {
+        document.getElementById('lcdm').innerHTML = ("0" + workMin).slice(-2);
+      } else {
+        document.getElementById('lcdm').innerHTML = ("0" + breakMin).slice(-2);
+      };
+    } else {
+      document.getElementById("lcdm").style.visibility = "hidden";
+      document.getElementById("lcds").style.visibility = "hidden";
+    }
+    setTimer--;
+  }
+};
+
+function test() {
+  sec = 3;
+};
+$(document).ready(function() {
+
+  $("#volume-tick").slider({
+    orientation: "vertical",
+    range: "min",
+    min: 0,
+    max: 100,
+    value: 20,
+    slide: function(event, ui) {
+      $("#ratchet").prop("volume", ui.value / 100);
+      $("#tick").prop("volume", ui.value / 100);
+      $("#tack").prop("volume", ui.value / 100);
+    }
+  });
+
+  $("#ratchet").prop("volume", $("#volume-tick").slider("value") / 100);
+  $("#tick").prop("volume", $("#volume-tick").slider("value") / 100);
+  $("#tack").prop("volume", $("#volume-tick").slider("value") / 100);
+
+  $("#volume-bell").slider({
+    orientation: "vertical",
+    range: "min",
+    min: 0,
+    max: 100,
+    value: 80,
+    slide: function(event, ui) {
+      $("#ding").prop("volume", ui.value / 100);
+    }
+  });
+
+  $("#ding").prop("volume", $("#volume-bell").slider("value") / 100);
+
+  $("#lcdm").html("88");
+  setTimeout(function() {
+    document.getElementById('lcdm').innerHTML = "25"
+  }, 1000);
+  $("#lcds").html("88");
+  setTimeout(function() {
+    document.getElementById('lcds').innerHTML = "00"
+  }, 1000);
+});
+</script>
+</head>
+
+<body>
+<!--
+    I have downloaded the following audios from freesound.org and re-encoded them in .ogg, .opus and .mp3 using Audacity.
+-->
+<audio id="ratchet" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ratchet.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ratchet.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ratchet.mp3" type="audio/mp3">
+</audio>
+<audio id="tick" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tick.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tick.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tick.mp3" type="audio/mp3">
+</audio>
+<audio id="tack" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tack.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tack.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/tack.mp3" type="audio/mp3">
+</audio>
+<audio id="ding" preload="auto">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ding.ogg" type="audio/ogg">
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ding.opus" type='audio/ogg; codecs="opus"'>
+  <source src="https://cdn.rawgit.com/lcneves/pomodoro-clock/master/ding.mp3" type="audio/mp3">
+</audio>
+<button type="button" id="test" onclick="test()">Test: t = 3s</button>
+<h1 id="title">Retro Pomodoro clock</h1>
+<div id="tomato">
+  <div id="top-bar">
+    <div id="top-left" class="sides left">
+      <div id="work-set-div">
+        <strong>SET WORK</strong>
+        <br />
+        <button id="work-minus-button" class=button onclick="set(0)">
+          <div id="work-minus-button-text" class="button-text">
+            <strong>–</strong>
+          </div>
+        </button><button id="work-plus-button" class=button onclick="set(1)">
+          <div id="work-plus-button-text" class="button-text">
+            <strong>+</strong>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div id="top-right" class="sides right">
+      <div id="break-set-div">
+        <strong>SET BREAK</strong>
+        <br />
+        <button id="break-minus-button" class="button" onclick="set(2)">
+          <div id="break-minus-button-text" class="button-text">
+            <strong>–</strong>
+          </div>
+        </button><button id="break-plus-button" class="button" onclick="set(3)">
+          <div id="break-plus-button-text" class="button-text">
+            <strong>+</strong>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="center-left" class="center">
+    <div id="volume-tick-div" class="volume-div">
+      <strong>TICK</strong>
+      <br />
+      <div id="volume-tick" class="volume-bar"></div>
+      <br />
+    </div>
+  </div>
+  <div id="display">
+    <div id="work-break">
+      <div id="work-div">
+        <div class="inline-block">
+          <div class=shadow>
+            <span>WORK</span>
+          </div>
+          <span id="work">WORK</span>
+        </div>
+      </div>
+      <div id="break-div">
+        <div class="inline-block">
+          <div class=shadow>
+            <span>BREAK</span>
+          </div>
+        <span id="break">BREAK</span>
+        </div>
+      </div>
+    </div>
+    <div id="clock">
+      <div class="shadow">
+        <p class="lcd m">88</p>
+        <p class="lcd">:</p>
+        <p class="lcd s">88</p>
+      </div>
+      <p id="lcdm" class="lcd m">52</p>
+      <p id="lcdd" class="lcd">:</p>
+      <p id="lcds" class="lcd s">34</p>
+    </div>
+  </div>
+  <div id="center-right" class="center">
+    <div id="volume-bell-div" class="volume-div">
+      <strong>BELL</strong>
+      <br />
+      <div id="volume-bell" class="volume-bar"></div>
+      <br />
+    </div>
+  </div>
+  <div id="bottom-bar">
+    <div id="bottom-left" class="sides left">
+      <div id="play-div">
+        <button id="play-button" class=button onclick="play()">
+          <div id="play-button-text" class="button-text">
+            <i class="fa fa-pause"></i> <strong>:</strong>
+            <i class="fa fa-play"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div id="bottom-right" class="sides right">
+      <div id="reset-div">
+        <button id="reset-button" class="button" onclick="reset()">
+          <div id="reset-button-text" class="button-text">
+            <strong>RESET</strong> <i class="fa fa-refresh"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
