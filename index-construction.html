@@ -1,28 +1,69 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webdesign by Lucas Neves</title>
-<style>
-body {text-align: center;}
-div {display: inline-block; max-width: 40em;}
-p, li {text-align: left;}
-</style>
-</head>
-<body>
-<h1>Webdesign by Lucas Neves</h1>
-<div>
-<p>This website is under construction. In the meanwhile, check out a few of my web apps:</p>
-<ul>
-<li><a href="calculator/">Chocolate Calc</a> — a calculator that looks like a chocolate bar!</li>
-<li><a href="weather/">Weather</a> — displays your local weather with beautiful animations.</li>
-<li><a href="pomodoro-clock/">Retro Pomodoro Clock</a> — the timepiece for the office, styled like a 1990s gadget.</li>
-<li><a href="simon/">Simon Game</a> — a replica of the classics from the 1970s. Feel the nostalgia!</li>
-<li><a href="tic-tac-toe/">Tic-Tac-Toe</a> — has three levels of difficulty, the hardest one is invincible!</li>
-</ul>
-<p>Drop me a message at lcneves@gmail.com.
-</div>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webdesign by Lucas Neves</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Bootstrap Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+    integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Raleway Google Font for body -->
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <!-- Quicksand Google Font for title -->
+    <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+    <!-- Gray pallette: http://www.color-hex.com/color/bdbab4 -->
+    <style>
+    body {
+      font-family: 'Raleway', sans-serif;
+      background-color: #dedcd9;
+    }
+      a:hover {
+        cursor: pointer;
+      }
+      .title {
+        font-family: 'Quicksand', sans-serif;
+      }
+      .nav {
+        margin: 1.5em auto;
+      }
+      .nav > li > a {
+        color: black;
+      }
+      .nav > .active > a {
+        background-color: #383736 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <h1 class="title text-center">Webdesign <small>by</small> Lucas Neves</h1>
+      </div>
+      <div class="row">
+        <ul class="nav nav-pills nav-justified">
+          <li role="presentation" class="active"><a>About me</a></li>
+          <li role="presentation"><a>Front-end apps</a></li>
+          <li role="presentation"><a>Full-stack apps</a></li>
+          <li role="presentation"><a>My certificates</a></li>
+        </ul>
+      </div>
+      <div>
+        <p>This website is under construction. In the meanwhile, check out a few of my web apps:</p>
+        <ul>
+          <li><a href="calculator/">Chocolate Calc</a> — a calculator that looks like a chocolate bar!</li>
+          <li><a href="weather/">Weather</a> — displays your local weather with beautiful animations.</li>
+          <li><a href="pomodoro-clock/">Retro Pomodoro Clock</a> — the timepiece for the office, styled like a 1990s gadget.</li>
+          <li><a href="simon/">Simon Game</a> — a replica of the classics from the 1970s. Feel the nostalgia!</li>
+          <li><a href="tic-tac-toe/">Tic-Tac-Toe</a> — has three levels of difficulty, the hardest one is invincible!</li>
+        </ul>
+        <p>Drop me a message at lcneves@gmail.com.</p>
+      </div>
+    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"</script>
+  </body>
 </html>
