@@ -25,6 +25,7 @@ a:hover {
 }
 .section {
   display: none;
+  transition: opacity 0.2s;
 }
 #about-flex-container {
   display: flex;
