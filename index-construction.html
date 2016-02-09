@@ -16,54 +16,225 @@
     <!-- Quicksand Google Font for title -->
     <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
     <!-- Gray pallette: http://www.color-hex.com/color/bdbab4 -->
-    <style>
-    body {
-      font-family: 'Raleway', sans-serif;
-      background-color: #dedcd9;
-    }
-      a:hover {
-        cursor: pointer;
-      }
-      .title {
-        font-family: 'Quicksand', sans-serif;
-      }
-      .nav {
-        margin: 1.5em auto;
-      }
-      .nav > li > a {
-        color: black;
-      }
-      .nav > .active > a {
-        background-color: #383736 !important;
-      }
-    </style>
+    <link href='css/index.css' rel='stylesheet' type='text/css'>
   </head>
   <body>
     <div class="container">
       <div class="row">
-        <h1 class="title text-center">Webdesign <small>by</small> Lucas Neves</h1>
+        <h1 class="title text-center">Webdesign <small>by</small><br id="small-br"> Lucas Neves</h1>
       </div>
       <div class="row">
         <ul class="nav nav-pills nav-justified">
-          <li role="presentation" class="active"><a>About me</a></li>
-          <li role="presentation"><a>Front-end apps</a></li>
-          <li role="presentation"><a>Full-stack apps</a></li>
-          <li role="presentation"><a>My certificates</a></li>
+          <li role="presentation" class="active"><a class="nav-link">About me</a></li>
+          <li role="presentation"><a class="nav-link">Front-end apps</a></li>
+          <li role="presentation"><a class="nav-link">Full-stack websites</a></li>
+          <li role="presentation"><a class="nav-link">My certificates</a></li>
         </ul>
       </div>
-      <div>
-        <p>This website is under construction. In the meanwhile, check out a few of my web apps:</p>
-        <ul>
-          <li><a href="calculator/">Chocolate Calc</a> — a calculator that looks like a chocolate bar!</li>
-          <li><a href="weather/">Weather</a> — displays your local weather with beautiful animations.</li>
-          <li><a href="pomodoro-clock/">Retro Pomodoro Clock</a> — the timepiece for the office, styled like a 1990s gadget.</li>
-          <li><a href="simon/">Simon Game</a> — a replica of the classics from the 1970s. Feel the nostalgia!</li>
-          <li><a href="tic-tac-toe/">Tic-Tac-Toe</a> — has three levels of difficulty, the hardest one is invincible!</li>
-        </ul>
-        <p>Drop me a message at lcneves@gmail.com.</p>
+      <div id="about-me" class="section">
+        <div class="row">
+          <div id="about-flex-container">
+            <img id="profile-img" src="img/Profile-picture-autumn-cropped-360x360.jpg">
+            <h3 id="quote">
+              A beautiful design should be both functional and pleasing to the eyes. Take a look at my portfolio of websites and apps: they look and work great!
+            </h3>
+          </div>
+        </div>
+        <div class="row">
+          <p class="paragraph">
+            Webdesign is my hobby. A very serious one.
+          </p>
+          <p class="paragraph">
+            Cat ipsum dolor sit amet, need to chase tail. Always hungry swat turds around the house but fall over dead (not really but gets sypathy). Sit on the laptop.
+            White cat sleeps on a black shirt roll on the floor purring your whiskers off under the bed, so stare at the wall, play with food and get confused by dust
+            and lick butt. Sit by the fire stare out the window please stop looking at your phone and pet me chew foot. Wake up human for food at 4am get video posted
+            to internet for chasing red dot sun bathe pee in human's bed until he cleans the litter box, so hunt anything that moves. Lick butt the dog smells bad or
+            stare at wall turn and meow stare at wall some more meow again continue staring rub face on owner so the dog smells bad eat and than sleep on your face yet
+            unwrap toilet paper. Please stop looking at your phone and pet me play time caticus cuteicus kitty power! sleep in the bathroom sink. Ears back wide eyed gnaw
+            the corn cob mark territory the dog smells bad chirp at birds or hunt anything that moves. Wake up human for food at 4am attack dog, run away and pretend to be
+            victim and find something else more interesting all of a sudden cat goes crazy. Favor packaging over toy.
+          </p>
+          <p class="paragraph">
+            Claws in your leg. Sleep on dog bed, force dog to sleep on floor put toy mouse in food bowl run out of litter box at full speed for scratch leg; meow for can
+            opener to feed me who's the baby who's the baby, yet destroy couch as revenge. Immediately regret falling into bathtub hunt by meowing loudly at 5am next to
+            human slave food dispenser hide at bottom of staircase to trip human or peer out window, chatter at birds, lure them to mouth. Kick up litter jump around on
+            couch, meow constantly until given food, instantly break out into full speed gallop across the house for no reason. Lick the plastic bag stretch, and cat slap
+            dog in face but purr for no reason yet meowwww destroy couch.
+          </p>
+        </div>
+      </div>
+      <div id="front-end" class="section">
+        <div class="row">
+          <div id="frontend-react-container"></div>
+        </div>
       </div>
     </div>
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js"</script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <!-- React and Babel -->
+    <script src="https://fb.me/react-0.14.7.js"></script>
+    <script src="https://fb.me/react-dom-0.14.7.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <script type="text/babel">
+
+      var PortfolioItemTag = React.createClass({
+        render: function() {
+          var tagArray = this.props.tags.map(function(tag, index) {
+            return (
+              <span key={index} className="tag">
+                {tag}
+              </span>
+            );
+          });
+          return (
+            <div className="tagsDiv">
+              {tagArray}
+            </div>
+          );
+        }
+      });
+
+      var PortfolioItem = React.createClass({
+        render: function() {
+          return (
+            <div className="portfolioItem">
+              <img src={'img/' + this.props.item.picture} />
+              <div className="portfolioItemInfo">
+                <h3 className="portfolioItemName">
+                  {this.props.item.name}
+                </h3>
+                <p className="portfolioItemDescription">
+                  {this.props.item.description}
+                </p>
+                <PortfolioItemTag tags={this.props.item.technologies} />
+              </div>
+            </div>
+          );
+        }
+      });
+
+      var PortfolioList = React.createClass({
+        render: function() {
+          var itemArray = this.props.data.map(function(item, index) {
+            return (
+              <a key={index} className="portfolioAnchor" href={item.link} target="_blank">
+                <PortfolioItem item={item} />
+              </a>
+            );
+          });
+          return (
+            <div className="portfolioFlexContainer">
+              {itemArray}
+            </div>
+          );
+        }
+      });
+
+      var frontendPortfolioArray = [
+        {
+          name: "Chocolate Calc",
+          picture: "Calculator.png",
+          description: "A calculator that looks like a chocolate bar!",
+          link: "calculator/",
+          technologies: ["CSS3", "JavaScript"]
+        },
+        {
+          name: "Weather",
+          picture: "Weather.png",
+          description: "Displays your local weather with beautiful animations.",
+          link: "weather/",
+          technologies: ["CSS3 animations", "inline SVG", "jQuery", "Geolocation"]
+        },
+        {
+          name: "Retro Pomodoro Clock",
+          picture: "Pomodoro.png",
+          description: "the timepiece for the office, styled like a 1990s gadget.",
+          link: "pomodoro-clock/",
+          technologies: ["JavaScript", "CSS3", "HTML5 Audio"]
+        },
+        {
+          name: "Simon Game",
+          picture: "Simon.png",
+          description: "Simon Game",
+          link: "A replica of the classics from the 1970s. Feel the nostalgia!",
+          technologies: ["CSS3", "HTML5 Audio", "jQuery"]
+        },
+        {
+          name: "Tic-Tac-Toe",
+          picture: "Tic-tac-toe.png",
+          description: "Play against three levels of difficulty. The middle one is smart and fun to play. The hardest one is invincible!",
+          link: "tic-tac-toe/",
+          technologies: ["Artificial intelligence", "Animate.js"]
+        }
+      ];
+
+      ReactDOM.render(
+        <PortfolioList data={frontendPortfolioArray} />,
+        document.getElementById('frontend-react-container')
+      );
+    </script>
+
+    <script>
+      (function ($) {
+        window.setTimeout(function() {
+          var animationDuration = 200;
+
+          $('#about-me').fadeIn(animationDuration);
+
+          $('.nav-link').click(function() {
+            $('.active').removeClass('active');
+            $(this).parent().addClass('active');
+            var tab = this.innerHTML;
+            $('.section').fadeOut(animationDuration, function() {
+              window.setTimeout(function() {
+                switch (tab) {
+                case "About me":
+                  $('#about-me').fadeIn(animationDuration);
+                  break;
+                case "Front-end apps":
+                  $('#front-end').fadeIn(animationDuration);
+                  break;
+                }
+              }, animationDuration * 1.1);
+            });
+          });
+
+          $('.portfolioAnchor').hover(function() {
+            var thisItem = $(this).children('.portfolioItem');
+            thisItem.css('transform', 'rotateY(90deg)');
+            window.setTimeout(function() {
+              thisItem.children('img').css('display', 'none');
+              thisItem.children('.portfolioItemInfo').css('display', 'block');
+              thisItem.css('transform', 'rotateY(180deg)');
+            }, animationDuration);
+          }, function() {
+            var thisItem = $(this).children('.portfolioItem');
+            thisItem.css('transform', 'rotateY(270deg)');
+            window.setTimeout(function() {
+              thisItem.children('img').css('display', 'block');
+              thisItem.children('.portfolioItemInfo').css('display', 'none');
+              thisItem.css('transform', 'rotateY(0deg)');
+            }, animationDuration);
+          });
+            /*
+            $(this).children('.portfolioItem').css('transform', 'rotateY(90deg)');
+            window.setTimeout(function() {
+              $(this).children('.portfolioItem').children('img').css('display', 'none');
+              $(this).children('.portfolioItem').children('.portfolioItemInfo').css('display', 'block');
+              $(this).children('.portfolioItem').css('transform', 'rotateY(180deg)');
+            }, animationDuration);
+          }, function() {
+            $(this).children('.portfolioItem').css('transform', 'rotateY(270deg)');
+            window.setTimeout(function() {
+              $(this).children('.portfolioItem').children('img').css('display', 'block');
+              $(this).children('.portfolioItem').children('.portfolioItemInfo').css('display', 'none');
+              $(this).children('.portfolioItem').css('transform', 'rotateY(0deg)');
+            }, animationDuration);
+          });
+          */
+        },1000);
+      }(jQuery));
+    </script>
   </body>
 </html>

@@ -1,0 +1,91 @@
+html {
+  height: auto;
+  min-height: 100%;
+  background-color: #dedcd9;
+  box-shadow: inset 0 0 20em 2em #aaa7a2;
+}
+body {
+  font-family: 'Raleway', sans-serif;
+  background-color: rgba(0, 0, 0, 0);
+}
+a:hover {
+  cursor: pointer;
+}
+.title, #quote {
+  font-family: 'Quicksand', sans-serif;
+}
+.nav {
+  margin: 1.5em auto 2.5em;
+}
+.nav > li > a {
+  color: black;
+}
+.nav > .active > a {
+  background-color: #383736 !important;
+}
+.section {
+  display: none;
+}
+#about-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: auto 1em 3em;
+}
+#profile-img {
+  float: left;
+  border-radius: 50%;
+  width: 15em;
+  height: 15em;
+  margin-right: 1.5em;
+}
+#quote {
+  text-align: justify;
+}
+@media (min-width: 640px) {
+  #small-br {
+    display: none;
+  }
+  #about-flex-container {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  #quote {
+    text-align: right;
+  }
+  .paragraph {
+    font-size: 130%;
+    text-align: justify;
+  }
+}
+@media (min-width: 768px) {
+  #about-flex-container {
+    margin: 3em 1em 6em;
+  }
+  #quote {
+    line-height: 1.4em;
+  }
+}
+.portfolioFlexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;;
+  align-items: flex-start;
+}
+.portfolioItem {
+  width: 25em;
+  background-color: #ebeae8;
+  border-radius: 2em;
+  overflow: hidden;
+  margin: 1em auto;
+  transition: transform 0.2s;
+}
+.portfolioItem > img {
+  width: 100%;
+  height: 100%;
+}
+.portfolioItemInfo {
+  display: none;
+  transform: rotateY(180deg);
+}
