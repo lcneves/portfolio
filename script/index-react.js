@@ -16,18 +16,24 @@ var PortfolioItemTag = React.createClass({
 });
 
 var PortfolioItem = React.createClass({
+  handleClick: function(url) {
+    var iframe = document.getElementById('tablet-iframe');
+    iframe.src = url + 'index.html';
+    iframe.style.display = 'block';
+    window.setTimeout(function () {
+      iframe.style.opacity = '1';
+      iframe.style.width = '71em';
+      iframe.style.height = '38em';
+      iframe.style.top = '0';
+      iframe.style.left = '0';
+    }, 10);
+  },
   render: function() {
     return (
-      <div className="portfolioItem">
+      <div className="portfolioItem" onClick={this.handleClick.bind(null, this.props.item.link)}>
         <img src={'img/' + this.props.item.picture} />
-        <div className="portfolioItemInfo">
-          <h3 className="portfolioItemName">
-            {this.props.item.name}
-          </h3>
-          <p className="portfolioItemDescription">
-            {this.props.item.description}
-          </p>
-          <PortfolioItemTag tags={this.props.item.technologies} />
+        <div className="portfolioItemName">
+          {this.props.item.name}
         </div>
       </div>
     );
@@ -39,29 +45,13 @@ var PortfolioList = React.createClass({
     (function($) {
       $('.portfolioAnchor').hover(function() {
         var thisItem = $(this).children('.portfolioItem');
-        thisItem.css('transform', 'rotateY(90deg)');
-        window.setTimeout(function() {
-          thisItem.children('img').css('display', 'none');
-          thisItem.children('.portfolioItemInfo').css('display', 'block');
-          thisItem.css('transform', 'rotateY(180deg)');
-        }, animationDuration);
-      }, function() {
-        var thisItem = $(this).children('.portfolioItem');
-        thisItem.css('transform', 'rotateY(270deg)');
-        window.setTimeout(function() {
-          thisItem.children('img').css('display', 'block');
-          thisItem.children('.portfolioItemInfo').css('display', 'none');
-          thisItem.css('transform', 'rotateY(0deg)');
-        }, animationDuration);
       });
     }(jQuery));
   },
   render: function() {
     var itemArray = this.props.data.map(function(item, index) {
       return (
-        <a key={index} className="portfolioAnchor" href={item.link} target="_blank">
-          <PortfolioItem item={item} />
-        </a>
+        <PortfolioItem key={index} item={item} />
       );
     });
     return (
@@ -91,14 +81,14 @@ var frontendPortfolioArray = [
     name: "Retro Pomodoro Clock",
     picture: "Pomodoro.png",
     description: "the timepiece for the office, styled like a 1990s gadget.",
-    link: "pomodoro-clock/",
+    link: "pomodoro/",
     technologies: ["JavaScript", "CSS3", "HTML5 Audio"]
   },
   {
     name: "Simon Game",
     picture: "Simon.png",
-    description: "Simon Game",
-    link: "A replica of the classics from the 1970s. Feel the nostalgia!",
+    description: "A replica of the classics from the 1970s. Feel the nostalgia!",
+    link: "simon/",
     technologies: ["CSS3", "HTML5 Audio", "jQuery"]
   },
   {

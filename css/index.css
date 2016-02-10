@@ -25,7 +25,8 @@ a:hover {
 }
 .section {
   display: none;
-  transition: opacity 0.2s;
+  opacity: 0;
+  transition: opacity 0.4s;
 }
 #about-flex-container {
   display: flex;
@@ -68,25 +69,72 @@ a:hover {
     line-height: 1.4em;
   }
 }
+#tablet {
+  background-color: black;
+  width: 75em;
+  height: 45em;
+  padding: 2em;
+  border-radius: 1em;
+  margin: auto;
+}
+#tablet-screen {
+  background: url(/img/ubuntu-wallpaper.jpg);
+  background-size: cover;
+  position: relative;
+}
+#tablet-screen, .portfolioFlexContainer {
+  height: 38em;
+}
+#tablet-button {
+  margin: 1em auto 0;
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  border: 0.2em solid gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fa-home {
+  color: white;
+  font-size: 130%;
+}
+#frontend-react-container {
+}
 .portfolioFlexContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;;
-  align-items: flex-start;
+  justify-content: space-around;
+  align-items: flex-end;
 }
 .portfolioItem {
-  width: 25em;
-  background-color: #ebeae8;
-  border-radius: 2em;
+  width: 7em;
+  height: 11em;
+  border-radius: 0.7em;
   overflow: hidden;
   margin: 1em auto;
-  transition: transform 0.2s;
 }
 .portfolioItem > img {
-  width: 100%;
-  height: 100%;
+  border-radius: 0.7em;
+  width: 7em;
+  height: 7em;
 }
-.portfolioItemInfo {
+.portfolioItemName {
+  font-size: 90%;
+  color: white;
+  font-weight: bold;
+  margin: 1em auto;
+  text-align: center;
+  line-height: 1.1em;
+}
+#tablet-iframe {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 19em;
+  left: 35.5em;
   display: none;
-  transform: rotateY(180deg);
+  opacity: 0;
+  transition: width 0.5s, height: 0.5s, opacity 0.5s;
+  border: 0;
 }
