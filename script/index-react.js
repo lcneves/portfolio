@@ -37,13 +37,6 @@ var PortfolioItem = React.createClass({
 });
 
 var PortfolioList = React.createClass({
-  componentDidMount: function() {
-    (function($) {
-      $('.portfolioAnchor').hover(function() {
-        var thisItem = $(this).children('.portfolioItem');
-      });
-    }(jQuery));
-  },
   render: function() {
     var itemArray = this.props.data.map(function(item, index) {
       return (
