@@ -7,6 +7,7 @@ var sections = document.getElementsByClassName('section');
 
 for (var i = 0; i < navLinks.length; i++) {
   navLinks[i].addEventListener('click', function (e) {
+    e = e ? e : window.event; // Sounds funny
     var activeTab = document.getElementsByClassName('active');
     activeTab[0].className = '';
     for (var j = 0; j < sections.length; j++) {
@@ -18,16 +19,25 @@ for (var i = 0; i < navLinks.length; i++) {
       }(j));
     }
     var thisSection;
-    var thisTabText = e.target.innerText.trim();
+    var thisTabText = e.target ?
+      e.target.textContent.trim() : e.srcElement.textContent.trim();
     for (var k = 0; k < navTabs.length; k++) {
-      if (navTabs[k].innerText.trim() === thisTabText) {
+      if (navTabs[k].textContent.trim() === thisTabText) {
         navTabs[k].className = 'active';
         switch (thisTabText) {
           case 'About me':
             thisSection = document.getElementById('about-me');
+            document.documentElement.style.boxShadow =
+            'inset 0 0 20em 2em #aaa7a2';
+            document.documentElement.style.backgroundColor =
+            '#dedcd9';
             break;
           case 'Front-end apps':
             thisSection = document.getElementById('front-end');
+            document.documentElement.style.boxShadow =
+            'inset 0 0 20em 2em #ca8782';
+            document.documentElement.style.backgroundColor =
+            '#febcb9';
             break;
         }
         window.setTimeout(function () {
@@ -47,5 +57,9 @@ document.getElementById('about-me').style.cssText =
 
 document.getElementById('tablet-button').addEventListener('click', function (e) {
   var iframe = document.getElementById('tablet-iframe');
-  iframe.style.display = 'none';
+  iframe.style.opacity = '0';
+  window.setTimeout(function () {
+    iframe.style.display = 'none';
+    iframe.src = 'about:blank';
+  }, animationDuration);
 }, false);

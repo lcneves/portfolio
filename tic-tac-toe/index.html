@@ -247,6 +247,13 @@ only screen and (max-device-height: 480px) {
     font-size: 1em;
   }
 }
+@media (max-width: 640px), (max-height: 640px) {
+  body {
+    font-size: 80%;
+  }
+  #board {
+    margin: 0 0 1em;
+  }
 </style>
 <script>
 $(document).ready(function() {
@@ -336,7 +343,7 @@ $(document).ready(function() {
       $(".mark").addClass('animated zoomOut');
       window.setTimeout(function() {
         reset();
-      }, 400); 
+      }, 400);
       } else {
         blink(me);
         window.setTimeout(function() {
@@ -384,7 +391,7 @@ $(document).ready(function() {
       $(".mark").addClass('animated zoomOut');
       window.setTimeout(function() {
         reset();
-      }, 400); 
+      }, 400);
     }
   }
 

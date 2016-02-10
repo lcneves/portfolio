@@ -31,6 +31,8 @@ strong, span {
   font-weight: normal;
   text-align: center;
   color: #c00;
+  position: relative;
+  top: -0.5em;
 }
 #tomato {
   width: 25em;
@@ -69,6 +71,7 @@ strong, span {
   display: inline-block;
   margin: auto;
   position: relative;
+  top: 1em;
 }
 
 .lcd {
@@ -211,7 +214,7 @@ strong, span {
 }
 
 #break-minus-button-text {
-  bottom: 0.1em;  
+  bottom: 0.1em;
 }
 
 #break-plus-button {
@@ -223,7 +226,7 @@ strong, span {
 }
 
 #break-plus-button-text {
-  right: 0.35em;  
+  right: 0.35em;
 }
 
 .volume-div {
@@ -250,6 +253,19 @@ strong, span {
 
 #work, #break {
   visibility: hidden;
+}
+
+#bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  width: 15em;
+}
+
+@media (max-width: 640px), (max-height: 640px) {
+  body {
+    font-size: 90%;
+  }
 }
 </style>
 
@@ -555,10 +571,8 @@ $(document).ready(function() {
   </div>
   <div id="center-left" class="center">
     <div id="volume-tick-div" class="volume-div">
-      <strong>TICK</strong>
-      <br />
+    <div><strong>TICK</strong></div>
       <div id="volume-tick" class="volume-bar"></div>
-      <br />
     </div>
   </div>
   <div id="display">
@@ -593,10 +607,8 @@ $(document).ready(function() {
   </div>
   <div id="center-right" class="center">
     <div id="volume-bell-div" class="volume-div">
-      <strong>BELL</strong>
-      <br />
+      <div><strong>BELL</strong></div>
       <div id="volume-bell" class="volume-bar"></div>
-      <br />
     </div>
   </div>
   <div id="bottom-bar">

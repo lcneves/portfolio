@@ -195,26 +195,33 @@ body:hover {
   background-color: #4c0000
 }
 
-@media only screen and (max-device-width: 480px) {
-  body {font-size: 65%;}
+@media (max-width: 640px), (max-height: 640px) {
+  body {
+    font-size: 80%;
+  }
+  #console {
+    margin: 3em auto;
+  }
 }
-@media only screen and (max-device-height: 480px) {
-  body {font-size: 65%;}
+
+@media only screen and (max-device-width: 480px),
+ only screen and (max-device-height: 480px) {
+  body { font-size: 65%; }
 }
 </style>
 <script>
 $(document).ready(function() {
-  
+
   /* I have generated these audio files with Audacity, using the profile "square wave no alias", with the frequencies from the original Simon Game, as stated on http://www.waitingforfriday.com/index.php/Reverse_engineering_an_MB_Electronic_Simon_game */
-  
+
   var greenAudio = document.getElementById('green-audio');
   var redAudio = document.getElementById('red-audio');
   var yellowAudio = document.getElementById('yellow-audio');
   var blueAudio = document.getElementById('blue-audio');
   var loseAudio = document.getElementById('lose-audio');
-  
+
   /* Whenever possible, the following timing values were obtained from this source: http://www.waitingforfriday.com/index.php/Reverse_engineering_an_MB_Electronic_Simon_game */
-  
+
   var INTERVAL = 50,
     WAIT = 800,
     LOSE_DURATION = 1500,
@@ -519,9 +526,9 @@ $(document).ready(function() {
     razz(0);
 
     function razz(i) {
-      
+
       /* Very weird victory celebration routine, but apparently this is exactly what the Simon machines from the late 70s did! */
-      
+
       window.setTimeout(function() {
         if (i == 14) {
           loseAudio.play();
