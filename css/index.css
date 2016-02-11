@@ -101,6 +101,49 @@ a:hover {
   opacity: 0;
   transition: all 0.4s;
 }
+#tablet-menu-div {
+  position: absolute;
+  top: 2em;
+  right: 2em;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 2em;
+  height: 2em;
+  border-radius: 0.2em;
+  color: #f8f8f7;
+  display: none;
+  opacity: 0;
+  transition: all 0.4s;
+}
+#tablet-menu-div:hover {
+  cursor: pointer;
+}
+#tablet-menu {
+  position: absolute;
+  top: 4em;
+  right: 2em;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #f8f8f7;
+  border-radius: 0.2em;
+  display: none;
+  opacity: 0;
+  transition: all 0.2s;
+}
+#tablet-menu-ul {
+  list-style-type: none;
+  padding: 0.5em;
+}
+#tablet-menu-ul > li {
+  margin: 0.6em 0 0;
+  font-weight: bold;
+}
+#tablet-menu-ul > li:hover {
+  cursor: pointer;
+  background-color: #f8f8f7;
+  color: black;
+}
 #tablet-topbar {
   background-color: rgba(0, 0, 0, 0.6);
   font-family: sans-serif;
