@@ -63,8 +63,11 @@ a:hover {
   }
 }
 @media (min-width: 768px) {
+  .nav {
+    margin-bottom: 6em;
+  }
   #about-flex-container {
-    margin: 3em 1em 6em;
+    margin: auto 1em 6em;
   }
   #quote {
     line-height: 1.4em;
