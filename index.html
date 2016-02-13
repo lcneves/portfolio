@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Webdesign by Lucas Neves</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type='text/css'
     integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type='text/css'>
     <!-- Raleway Google Font for body -->
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <!-- Quicksand Google Font for title -->
@@ -25,8 +25,7 @@
       <div class="row">
         <ul class="nav nav-pills nav-justified">
           <li role="presentation" class="active"><a class="nav-link">About me</a></li>
-          <li role="presentation"><a class="nav-link">Front-end apps</a></li>
-          <li role="presentation"><a class="nav-link">Full-stack websites</a></li>
+          <li role="presentation"><a class="nav-link">Portfolio</a></li>
           <li role="presentation"><a class="nav-link">My certificates</a></li>
         </ul>
       </div>
@@ -62,7 +61,7 @@
           </p>
         </div>
       </div>
-      <div id="front-end" class="section">
+      <div id="portfolio" class="section">
         <div class="row">
           <div id="tablet">
             <div id="tablet-screen">
@@ -70,7 +69,10 @@
                 <span id="tablet-time"></span>
                 <i class="fa fa-battery-three-quarters"></i>
               </div>
-              <div id="frontend-react-container"></div>
+              <div id="portfolio-container">
+                <div id="frontend-react-container"></div>
+                <div id="fullstack-react-container"></div>
+              </div>
               <iframe src="about:blank" id="tablet-iframe"></iframe>
               <div id="tablet-menu-div">
                 <i class="fa fa-bars"></i>
@@ -79,14 +81,26 @@
                 <ul id="tablet-menu-ul">
                   <li id="tablet-menu-info"><i class="fa fa-question"></i>
                     About this app</li>
-                  <li id="tablet-menu-open"><i class="fa fa-external-link"></i>
-                    Open in new tab</li>
+                  <li id="tablet-menu-open">
+                    <a id="tablet-menu-open-link" href="#" target="_blank">
+                      <i class="fa fa-external-link"></i>
+                      Open in new tab
+                    </a>
+                  </li>
                 </ul>
               </div>
+              <div id="tablet-info"></div>
             </div>
             <div id="tablet-button">
               <i class="fa fa-home"></i>
             </div>
+          </div>
+        </div>
+      </div>
+      <div id="certificates" class="section">
+        <div class="row">
+          <div class="col col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div id="certificates-react-container"></div>
           </div>
         </div>
       </div>

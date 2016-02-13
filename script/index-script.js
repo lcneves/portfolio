@@ -21,8 +21,7 @@ var myPortfolio = (function () {
         }(j));
       }
       var thisSection;
-      var thisTabText = e.target ?
-        e.target.textContent.trim() : e.srcElement.textContent.trim();
+      var thisTabText = e.target ? e.target.textContent.trim() : e.srcElement.textContent.trim();
       for (var k = 0; k < navTabs.length; k++) {
         if (navTabs[k].textContent.trim() === thisTabText) {
           navTabs[k].className = 'active';
@@ -34,12 +33,19 @@ var myPortfolio = (function () {
               document.documentElement.style.backgroundColor =
               '#dedcd9';
               break;
-            case 'Front-end apps':
-              thisSection = document.getElementById('front-end');
+            case 'Portfolio':
+              thisSection = document.getElementById('portfolio');
               document.documentElement.style.boxShadow =
               'inset 0 0 20em 2em #ca8782';
               document.documentElement.style.backgroundColor =
               '#febcb9';
+              break;
+            case 'My certificates':
+              thisSection = document.getElementById('certificates');
+              document.documentElement.style.boxShadow =
+              'inset 0 0 20em 2em #8ac782';
+              document.documentElement.style.backgroundColor =
+              '#befcb9';
               break;
           }
           window.setTimeout(function () {
@@ -53,10 +59,13 @@ var myPortfolio = (function () {
     }, false);
   }
 
-  // Run once
+  // This code runs the portfolio tablet
   var menuButtom = document.getElementById('tablet-menu-div');
   var menu = document.getElementById('tablet-menu');
   var iframe = document.getElementById('tablet-iframe');
+  var menuInfo = document.getElementById('tablet-menu-info');
+  var info = document.getElementById('tablet-info');
+  var openTab = document.getElementById('tablet-menu-open-link');
 
   document.getElementById('about-me').style.cssText =
   'display: block; opacity: 1;';
@@ -64,11 +73,8 @@ var myPortfolio = (function () {
   // Event listeners for mouse clicks on certain elements
   document.getElementById('tablet-button').addEventListener('click', function (e) {
     closeTabletMenu();
-    iframe.style.opacity = menuButtom.style.opacity ='0';
-    window.setTimeout(function () {
-      iframe.style.display = menuButtom.style.display = 'none';
-      iframe.src = 'about:blank';
-    }, animationDuration);
+    closeInfo();
+    closeApp();
   }, false);
 
   menuButtom.addEventListener('click', function (e) {
@@ -77,6 +83,15 @@ var myPortfolio = (function () {
     } else {
       closeTabletMenu();
     }
+  }, false);
+
+  menuInfo.addEventListener('click', function (e) {
+    closeTabletMenu();
+    openInfo();
+  }, false);
+
+  info.addEventListener('click', function (e) {
+    closeInfo();
   }, false);
 
   // Functions to animate the UI
@@ -95,18 +110,41 @@ var myPortfolio = (function () {
   };
 
   var openApp = function (url) {
-    iframe.src = url + 'index.html';
+    iframe.src = url;
     iframe.style.display = 'block';
     menuButtom.style.display = 'flex';
+    openTab.setAttribute('href', url);
     window.setTimeout(function () {
       iframe.style.opacity = menuButtom.style.opacity = '1';
     }, 200); // Arbitrary time to load app
-  }
+  };
+
+  var closeApp = function () {
+    iframe.style.opacity = menuButtom.style.opacity = '0';
+    window.setTimeout(function () {
+      iframe.style.display = menuButtom.style.display = 'none';
+      iframe.src = 'about:blank';
+    }, animationDuration);
+  };
+
+  var openInfo = function () {
+    info.style.display = 'flex';
+    window.setTimeout(function () {
+      info.style.opacity = '1';
+    }, animationDuration / 2);
+  };
+
+  var closeInfo = function () {
+    info.style.opacity = '0';
+    window.setTimeout(function () {
+      info.style.display = 'none';
+    }, animationDuration / 2);
+  };
 
   // Exporting the functions above to index-react.js
   return {
     openTabletMenu: openTabletMenu,
     closeTabletMenu: closeTabletMenu,
     openApp: openApp
-  }
+  };
 })();
