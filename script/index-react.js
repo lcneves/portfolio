@@ -132,13 +132,6 @@
       description: "Play against three levels of difficulty. The middle one is smart and fun to play. The hardest one is invincible!",
       link: "tic-tac-toe/",
       technologies: ["Artificial intelligence", "JavaScript", "Animate.js"]
-    },
-    {
-      name: "Pomodoro",
-      picture: "Pomodoro.png",
-      description: "The timepiece for the office, styled like a 1990s gadget.",
-      link: "pomodoro/",
-      technologies: ["JavaScript", "CSS3", "HTML5 Audio"]
     }
   ];
 
@@ -261,13 +254,8 @@
         );
       });
       return (
-        <div>
-          <h2 className="certificatesTitle">
-            My developer certificates
-          </h2>
-          <div className="certificatesContainer">
-            {certificateArray}
-          </div>
+        <div className="certificatesContainer">
+          {certificateArray}
         </div>
       );
     }
