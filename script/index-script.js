@@ -59,6 +59,10 @@ var myPortfolio = (function () {
     }, false);
   }
 
+  // Set the portfolio tab to show on load
+  document.getElementById('portfolio').style.cssText =
+  'display: block; opacity: 1;';
+
   // This code runs the portfolio tablet
   var menuButtom = document.getElementById('tablet-menu-div');
   var menu = document.getElementById('tablet-menu');
@@ -66,9 +70,6 @@ var myPortfolio = (function () {
   var menuInfo = document.getElementById('tablet-menu-info');
   var info = document.getElementById('tablet-info');
   var openTab = document.getElementById('tablet-menu-open-link');
-
-  document.getElementById('about-me').style.cssText =
-  'display: block; opacity: 1;';
 
   // Event listeners for mouse clicks on certain elements
   document.getElementById('tablet-button').addEventListener('click', function (e) {

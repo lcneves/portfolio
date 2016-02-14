@@ -147,7 +147,7 @@
       name: 'Your Stock',
       description: 'Chart the stock market in collaboration with your colleagues! All changes to the chart are updated to all users in real time.',
       link: 'https://yourstock.herokuapp.com',
-      technologies: ['Node.js', 'Express', 'WebSockets', 'Yahoo API', 'Highcharts', 'Bootstrap'],
+      technologies: ['Node.js', 'Express', 'WebSockets', 'Yahoo API', 'Highcharts', 'Bootstrap', 'AngularJS'],
       icon: 'fa-line-chart',
       color: 'success'
     },
@@ -155,7 +155,7 @@
       name: 'Your Pin',
       description: 'A Pinterest clone demo. Add photos and images to the gallery! Open in new tab to login with Twitter, for security reasons.',
       link: 'https://yourpin.herokuapp.com',
-      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'OAuth', 'Login with Twitter', 'Bootstrap', 'Masonry'],
+      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'OAuth', 'Login with Twitter', 'Bootstrap', 'AngularJS', 'Masonry'],
       icon: 'fa-picture-o',
       color: 'danger'
     },
@@ -163,7 +163,7 @@
       name: 'Your Book',
       description: "A book club system. Manage your library, see other people's books, propose and accept trade requests!",
       link: 'https://yourbook.herokuapp.com',
-      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'Open Library API', 'Bootstrap'],
+      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'Open Library API', 'Bootstrap', 'AngularJS'],
       icon: 'fa-book',
       color: 'info'
     },
@@ -171,7 +171,7 @@
       name: 'Your Bar',
       description: 'See all bars in your area, check in and find out how many people are going!',
       link: 'https://yourbar.herokuapp.com',
-      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'Yelp API'],
+      technologies: ['Node.js', 'Express', 'MongoDB', 'Passport session', 'Yelp API', 'AngularJS'],
       icon: 'fa-glass',
       color: 'warning'
     }

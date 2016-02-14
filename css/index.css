@@ -1,8 +1,8 @@
 html {
   height: auto;
   min-height: 100%;
-  background-color: #dedcd9;
-  box-shadow: inset 0 0 20em 2em #aaa7a2;
+  background-color: #febcb9;
+  box-shadow: inset 0 0 20em 2em #ca8782;
   transition: all 1s;
 }
 body {
@@ -21,8 +21,12 @@ a:hover {
 .nav > li > a {
   color: black;
 }
-.nav > .active > a {
+.nav > .active > a, .btn-default {
   background-color: #383736 !important;
+  color: white !important;
+}
+.btn-default {
+  margin: 1em 1em 0 0;
 }
 .section {
   display: none;
@@ -76,6 +80,7 @@ a:hover {
 #tablet {
   background-color: black;
   width: 75em;
+  max-width: 100%;
   height: 48em;
   padding: 2em;
   border: 0.3em outset #444;
@@ -86,8 +91,6 @@ a:hover {
   background: url(/img/ubuntu-wallpaper.jpg);
   background-size: cover;
   position: relative;
-}
-#tablet-screen {
   height: 40em;
 }
 #tablet-iframe {
@@ -287,6 +290,64 @@ text-align: center;
   margin: 1em auto 0;
   text-align: center;
   line-height: 1.1em;
+}
+@media (max-width: 1049px) {
+  #tablet {
+    font-size: 90%;
+  }
+}
+@media (max-width: 767px) {
+  #tablet {
+    width: 30em;
+    padding: 1em;
+  }
+  #tablet-screen {
+    height: 42em;
+  }
+  .portfolioFlexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .portfolioTitle {
+    font-size: 16px;
+  }
+  .portfolioItem {
+    width: 5.5em;
+    height: 7.5em;
+    margin: 0.5em;
+  }
+  .portfolioItem > img, .icon-div {
+    width: 5.5em;
+    height: 5.5em;
+  }
+}
+@media (max-width: 359px) {
+  #tablet {
+    font-size: 85%;
+  }
+}
+@media (max-width: 339px) {
+  #tablet {
+    font-size: 80%;
+  }
+}
+@media (max-width: 319px) {
+  #tablet {
+    font-size: 75%;
+  }
+}
+@media (max-height: 540px) {
+  #tablet {
+    height: 44em;
+  }
+  #tablet-screen {
+    height: 38em;
+  }
+
+  #portfolio-container {
+    height: 36em;
+  }
 }
 .certificate {
   background-color: rgba(0, 0, 0, 0.1);
