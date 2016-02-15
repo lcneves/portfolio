@@ -50,6 +50,10 @@
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", this.props.item.link, true);
         xmlHttp.send(null);
+      } else if (this.props.item.link.indexOf('weather') > -1) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", 'https://yourweather.herokuapp.com', true);
+        xmlHttp.send(null);
       }
 
       var icon = this.props.item.picture ? <IconImg picture={this.props.item.picture} />
