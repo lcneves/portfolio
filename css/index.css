@@ -125,7 +125,7 @@ a:hover {
   position: relative;
   height: 40em;
 }
-#tablet-iframe {
+.tablet-iframe {
   width: 100%;
   height: 100%;
   position: absolute;

@@ -66,10 +66,14 @@ var myPortfolio = (function () {
   // This code runs the portfolio tablet
   var menuButtom = document.getElementById('tablet-menu-div');
   var menu = document.getElementById('tablet-menu');
-  var iframe = document.getElementById('tablet-iframe');
+  var iframeContainer = document.getElementById('iframe-container');
   var menuInfo = document.getElementById('tablet-menu-info');
   var info = document.getElementById('tablet-info');
   var openTab = document.getElementById('tablet-menu-open-link');
+  var pageTitle = "Webdesign by Lucas Neves";
+  var stateObj = { app: false };
+
+  console.log('Initial load! State: ' + history.state);
 
   // Event listeners for mouse clicks on certain elements
   document.getElementById('tablet-button').addEventListener('click', function (e) {
@@ -111,20 +115,36 @@ var myPortfolio = (function () {
   };
 
   var openApp = function (url) {
-    iframe.src = url;
-    iframe.style.display = 'block';
+    stateObj = { app: true };
+    if (!history.state) {
+      history.pushState(stateObj, pageTitle);
+    } else {
+      history.replaceState(stateObj, pageTitle);
+    }
+    while (iframeContainer.firstChild) {
+      iframeContainer.removeChild(iframeContainer.firstChild);
+    }
+    var newIframe = document.createElement("iframe");
+    newIframe.className = 'tablet-iframe';
+    newIframe.src = url;
+    iframeContainer.appendChild(newIframe);
+    newIframe.style.display = 'block';
     menuButtom.style.display = 'flex';
     openTab.setAttribute('href', url);
     window.setTimeout(function () {
-      iframe.style.opacity = menuButtom.style.opacity = '1';
+      newIframe.style.opacity = menuButtom.style.opacity = '1';
     }, 200); // Arbitrary time to load app
   };
 
   var closeApp = function () {
+    stateObj = { app: false };
+    if (history.state) {
+      history.replaceState(stateObj, pageTitle);
+    }
+    var iframe = document.getElementsByClassName('tablet-iframe')[0];
     iframe.style.opacity = menuButtom.style.opacity = '0';
     window.setTimeout(function () {
       iframe.style.display = menuButtom.style.display = 'none';
-      iframe.src = 'about:blank';
     }, animationDuration);
   };
 
@@ -141,6 +161,15 @@ var myPortfolio = (function () {
       info.style.display = 'none';
     }, animationDuration / 2);
   };
+
+  // Handle the back button to return to portfolio home
+  window.onpopstate = function(event) {
+    if (!event.state) {
+      closeApp();
+    } else if (!event.state.app) {
+      closeApp();
+    }
+  }
 
   // Exporting the functions above to index-react.js
   return {
