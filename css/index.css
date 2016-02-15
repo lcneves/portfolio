@@ -457,7 +457,7 @@ text-align: center;
     width: 30em;
     padding: 1em;
   }
-  #tablet-screen, #tablet-iframe {
+  #tablet-screen, .tablet-iframe {
     height: 42em;
   }
   #portfolio-container {
@@ -529,7 +529,7 @@ text-align: center;
   #tablet {
     height: 44em;
   }
-  #tablet-screen, #tablet-iframe {
+  #tablet-screen, .tablet-iframe {
     height: 38em;
   }
 
