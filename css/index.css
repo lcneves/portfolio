@@ -41,15 +41,20 @@ a:hover {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
   -webkit-flex-wrap: wrap;
   -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -57,7 +62,10 @@ a:hover {
   margin-bottom: 3em;
 }
 #profile-img {
-  float: left;
+  -webkit-flex-shrink: 0;
+  -moz-flex-shrink: 0;
+  -ms-flex-shrink: 0;
+  flex-shrink: 0;
   border-radius: 50%;
   width: 15em;
   height: 15em;
@@ -86,6 +94,11 @@ a:hover {
     -moz-flex-wrap: nowrap;
     -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
     justify-content: space-between;
   }
   #profile-img {
@@ -124,10 +137,12 @@ a:hover {
   background-size: cover;
   position: relative;
   height: 40em;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch !important;
 }
 .tablet-iframe {
   width: 100%;
-  height: 100%;
+  height: 40em;
   position: absolute;
   top: 0;
   left: 0;
@@ -141,8 +156,18 @@ a:hover {
   top: 2em;
   right: 2em;
   z-index: 1;
-  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   width: 2em;
   height: 2em;
@@ -192,15 +217,14 @@ a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -256,11 +280,16 @@ a:hover {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
+  -webkit-box-pack: end;
+  -moz-box-pack: end;
   -webkit-justify-content: flex-end;
   -moz-justify-content: flex-end;
   -ms-justify-content: flex-end;
   justify-content: flex-end;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -283,11 +312,16 @@ a:hover {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -303,15 +337,22 @@ a:hover {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
   -webkit-flex-flow: column;
   -moz-flex-flow: column;
   -ms-flex-flow: column;
   flex-flow: column;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
   -webkit-justify-content: space-around;
   -moz-justify-content: space-around;
   -ms-justify-content: space-around;
   justify-content: space-around;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -324,11 +365,14 @@ a:hover {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
   -webkit-flex-flow: row;
   -moz-flex-flow: row;
   -ms-flex-flow: row;
   flex-flow: row;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
   -webkit-justify-content: space-around;
   -moz-justify-content: space-around;
   -ms-justify-content: space-around;
@@ -352,6 +396,7 @@ text-align: center;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
+  display: -moz-inline-flex;
   display: inline-flex;
 }
 .portfolioTitle {
@@ -376,11 +421,16 @@ text-align: center;
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
+  display: -moz-flex;
   display: flex;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
@@ -407,7 +457,7 @@ text-align: center;
     width: 30em;
     padding: 1em;
   }
-  #tablet-screen {
+  #tablet-screen, #tablet-iframe {
     height: 42em;
   }
   #portfolio-container {
@@ -418,11 +468,14 @@ text-align: center;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
+    display: -moz-flex;
     display: flex;
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
     -webkit-justify-content: space-around;
     -moz-justify-content: space-around;
     -ms-justify-content: space-around;
@@ -476,7 +529,7 @@ text-align: center;
   #tablet {
     height: 44em;
   }
-  #tablet-screen {
+  #tablet-screen, #tablet-iframe {
     height: 38em;
   }
 

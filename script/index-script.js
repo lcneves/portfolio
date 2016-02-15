@@ -70,10 +70,20 @@ var myPortfolio = (function () {
   var menuInfo = document.getElementById('tablet-menu-info');
   var info = document.getElementById('tablet-info');
   var openTab = document.getElementById('tablet-menu-open-link');
-  var pageTitle = "Webdesign by Lucas Neves";
+  var pageTitle = 'Webdesign by Lucas Neves';
   var stateObj = { app: false };
 
-  console.log('Initial load! State: ' + history.state);
+  // Workaround to change display to flex with vendor support
+  // Source: http://stackoverflow.com/questions/17896846/set-display-property-flex-on-element-cross-browser
+  var setDisplayFlex = function (element) {
+    var dispValue = ['flex', '-webkit-flex', '-webkit-box', '-moz-box', '-ms-flexbox'];
+    for (var n = 0; n < dispValue.length; n++) {
+      element.style.display = dispValue[n];
+      if (window.getComputedStyle(element, null).display === dispValue[n]) {
+        break;
+      }
+    }
+  };
 
   // Event listeners for mouse clicks on certain elements
   document.getElementById('tablet-button').addEventListener('click', function (e) {
@@ -116,20 +126,20 @@ var myPortfolio = (function () {
 
   var openApp = function (url) {
     stateObj = { app: true };
-    if (!history.state) {
-      history.pushState(stateObj, pageTitle);
+    if (!window.history.state) {
+      window.history.pushState(stateObj, pageTitle);
     } else {
-      history.replaceState(stateObj, pageTitle);
+      window.history.replaceState(stateObj, pageTitle);
     }
     while (iframeContainer.firstChild) {
       iframeContainer.removeChild(iframeContainer.firstChild);
     }
-    var newIframe = document.createElement("iframe");
+    var newIframe = document.createElement('iframe');
     newIframe.className = 'tablet-iframe';
     newIframe.src = url;
     iframeContainer.appendChild(newIframe);
     newIframe.style.display = 'block';
-    menuButtom.style.display = 'flex';
+    setDisplayFlex(menuButtom);
     openTab.setAttribute('href', url);
     window.setTimeout(function () {
       newIframe.style.opacity = menuButtom.style.opacity = '1';
@@ -138,8 +148,8 @@ var myPortfolio = (function () {
 
   var closeApp = function () {
     stateObj = { app: false };
-    if (history.state) {
-      history.replaceState(stateObj, pageTitle);
+    if (window.history.state) {
+      window.history.replaceState(stateObj, pageTitle);
     }
     var iframe = document.getElementsByClassName('tablet-iframe')[0];
     iframe.style.opacity = menuButtom.style.opacity = '0';
@@ -149,7 +159,7 @@ var myPortfolio = (function () {
   };
 
   var openInfo = function () {
-    info.style.display = 'flex';
+    setDisplayFlex(info);
     window.setTimeout(function () {
       info.style.opacity = '1';
     }, animationDuration / 2);
@@ -163,13 +173,13 @@ var myPortfolio = (function () {
   };
 
   // Handle the back button to return to portfolio home
-  window.onpopstate = function(event) {
+  window.onpopstate = function (event) {
     if (!event.state) {
       closeApp();
     } else if (!event.state.app) {
       closeApp();
     }
-  }
+  };
 
   // Exporting the functions above to index-react.js
   return {
