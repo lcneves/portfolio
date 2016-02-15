@@ -67,7 +67,7 @@ p {
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,0.5) 70%, transparent 100%);  
+  background: linear-gradient(to bottom, rgba(50,50,50,1) 0%, rgba(50,50,50,0.5) 70%, transparent 100%);
   opacity: 0;
   transition: background-color 2s, opacity 2s;
 }
@@ -194,9 +194,8 @@ $(document).ready(function() {
   function getWeather() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var lat = position.coords.latitude,
-        lon = position.coords.longitude,
-        appId = "337297f2c1415d34d2905a3f8c7f9e7d";
-      $.getJSON("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + appId, function(json) {
+        lon = position.coords.longitude;
+      $.getJSON("https://yourweather.herokuapp.com/?lat=" + lat + "&lon=" + lon, function(json) {
         temp = json.main.temp;
         var weatherID = json.weather[0].id,
           weatherDesc = json.weather[0].description,
@@ -217,7 +216,7 @@ $(document).ready(function() {
     });
     autoRefresh = window.setTimeout(getWeather, 60000);
   }
-  
+
   function showTemp() {
   if (isCelsius) {
       $("#temp").html(Math.round(temp - 273.15) + "°C");
@@ -227,9 +226,9 @@ $(document).ready(function() {
   }
 
   function changeBG(time, weather, sunriseMs, sunsetMs, wind) {
-    
+
     /* This function sets the sky color and the weather conditions (rain, snow, thunder, fog, clouds, drizzle, etc) based on the codes received by the API and the local time. */
-    
+
     var ratio = 0,
       color = [0, 0, 0],
       day = [135, 206, 235],
@@ -242,7 +241,7 @@ $(document).ready(function() {
     stop();
 
     /* Refer to http://openweathermap.org/weather-conditions for weather condition codes */
-    
+
     if (weather == 800 || weather > 950 && weather < 957) {
       $("#clouds").css("opacity", "0");
     } else if (weather > 800 && weather < 804) {
@@ -342,9 +341,9 @@ $(document).ready(function() {
   }
 
   function makeStars() {
-    
+
     /* Randomly generates a canopy of twinkling stars. Its density should be constant: there will be more stars on a wider screen. */
-    
+
     var size,
       color,
       posX,
@@ -368,9 +367,9 @@ $(document).ready(function() {
   }
 
   function sun(isThere, time, sunrise, sunset) {
-    
+
     /* This function will move the sun around the sky according to the current time and the sunrise and sunset times  reported by the API */
-    
+
     if (!isThere) {
       $("#sun").css("visibility", "hidden");
     } else {
@@ -388,9 +387,9 @@ $(document).ready(function() {
   }
 
   function rain(intensity, wind, drizzle, freezing) {
-    
+
     /* This function creates rain drops made of inline SVG. Their quantity and size varies with the intensity reported by the API. The drops are skewed with the wind. It seems that average rain falls at about 10 m/s, so I make it skew proportionally to the wind, so that a 10 m/s wind will skew the rain at 45 degrees. */
-    
+
     var windFactor = 10,
       width = $("body").width(),
       skew = $("body").height() * wind / windFactor,
@@ -418,9 +417,9 @@ $(document).ready(function() {
   }
 
   function snow(intensity, wind) {
-    
+
     /* This function creates snow balls made of inline SVG. Their quantity and size varies with the intensity reported by the API. I've read on some paper that the average snow falls at a fifth of the speed of the average rain, so that's how I've adjusted this function for falling speed and wind, compared to the rain function above. */
-    
+
     var windFactor = 2,
       width = $("body").width(),
       skew = $("body").height() * wind / windFactor;
@@ -444,9 +443,9 @@ $(document).ready(function() {
   }
 
   function thunder(intensity) {
-    
+
     /* Randomly generates an inline-SVG thunder bolt that may flicker randomly. The frequency will depend on the severity of the thunder storm reported by the API. */
-    
+
     var durationMin = 100,
       durationRandom = 500;
     thunderFlash = window.setInterval(function() {
@@ -494,11 +493,11 @@ $(document).ready(function() {
     isCelsius = !isCelsius;
     showTemp();
   });
-  
+
   $("#demo-div").click(function() {
-    
+
     /* A brief demonstration of all the capabilities of this app. Sit back and enjoy! */
-    
+
     if (isDemo) {
       window.clearTimeout(demoLoop);
       getWeather();
