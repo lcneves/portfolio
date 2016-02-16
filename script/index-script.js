@@ -155,6 +155,9 @@ var myPortfolio = (function () {
     iframe.style.opacity = menuButtom.style.opacity = '0';
     window.setTimeout(function () {
       iframe.style.display = menuButtom.style.display = 'none';
+      while (iframeContainer.firstChild) {
+        iframeContainer.removeChild(iframeContainer.firstChild);
+      }
     }, animationDuration);
   };
 
@@ -176,8 +179,12 @@ var myPortfolio = (function () {
   window.onpopstate = function (event) {
     if (!event.state) {
       closeApp();
+      closeTabletMenu();
+      closeInfo();
     } else if (!event.state.app) {
       closeApp();
+      closeTabletMenu();
+      closeInfo();
     }
   };
 
